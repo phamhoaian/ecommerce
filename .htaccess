@@ -1,0 +1,19 @@
+# In the case of a production environment remove the following comment
+#SetEnv CI_ENV production
+
+php_value error_reporting 6135
+php_flag log_errors On
+php_flag display_errors On
+php_value error_log "/var/log/php/error_log"
+
+
+Options SymLinksIfOwnerMatch
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?$1 [L,QSA]
+
+
+RewriteEngine on
+RewriteCond $1 !^(index\.php|index_cron\.php|pMA|favicon\.ico|blog|url|sitemap_mobile\.xml|sitemap\.xml|y_key_.+\.html$|google.+\.html$|ga\.php|clients|test\.php|mixi|css|kikaku|local|cms_parts|app|parts|rss|inc|js|emoji|images|img|common|public|html|sliderimg|data|captcha|jscripts|uploads|wordpress|phpmyadmin|.+\.css$|.+\.gif$|.+\.jpg$|.+\.png$|.+\.js$)
+RewriteRule ^(.*)$ index.php/$1 [L]
