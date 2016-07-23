@@ -983,7 +983,7 @@ class DX_Auth
 				$subject = sprintf($this->ci->lang->line('auth_activate_subject'), $this->ci->config->item('DX_website_name'));
 
 				// Activation Link
-				$new_user['activate_url'] = site_url($this->ci->config->item('DX_activate_uri').rawurlencode($new_user["username"])."/{$new_user['activation_key']}");
+				$new_user['activate_url'] = site_url($this->ci->config->item('DX_activate_uri')."/{$new_user['activation_key']}");
 
 				// Trigger event and get email content
 				$this->ci->dx_auth_event->sending_activation_email($new_user, $message);

@@ -5,6 +5,9 @@ class MY_Controller extends CI_Controller {
 
 	protected $is_cache = FALSE;
 
+	protected $is_auth = FALSE;
+	protected $is_bench = FALSE;
+
 	private $cache_id = '';
 	private $cache_group = '';
 	protected $cache_output ='';
@@ -22,6 +25,34 @@ class MY_Controller extends CI_Controller {
 
 		// autoload helper
 		$this->load->helper(array('url','path','form','main'));
+
+		$this->init_APP();
+	}
+
+	/**
+	* Initial Set-up
+	*/
+	private function init_APP()
+	{
+		// set default base_url()
+		if( ! $this->config->config['base_url'] )
+		{
+			$this->config->config['base_url'] = $this->config->base_url();
+		}
+
+		// set authentication
+		if ($this->is_auth)
+		{
+			$this->initialize_auth();
+			$this->chk_auth();
+		}
+		$this->_url = current_url();
+
+		// enable benchmark
+		if($this->is_bench)
+		{
+			$this->output->enable_profiler(TRUE);
+		}
 	}
 
 	/**
@@ -156,5 +187,194 @@ class MY_Controller extends CI_Controller {
 		$q = preg_replace(array("/select/si", "/delete/si", "/update/si", "/insert/si","/from/si","/alert/si","/\[removed\]/si","/script/si","/\*/si"), "", $q);
 		
 		return $q;
+	}
+
+	public function message($message, $view_data = '')
+	{
+        $data = $view_data;
+		$data['main'] = $message;
+		
+		$body = $this->load_view('message', $data, TRUE);
+		$this->output($body);
+	}
+
+	/**
+	 * To set whether the value to display the benchmark
+	 */
+	protected function set_bench($bench)
+	{
+		$this->is_bench = $bench;
+	}
+
+	public function get_username($user_id = '')
+	{
+		if (!$this->_chk_auth())
+		{
+			return FALSE;
+		}
+		return $this->dx_auth->get_username();
+	}
+
+	/**
+	* Page view limited by the authority
+	*/
+	protected function chk_permission($this_role='9')
+	{
+		if(!$this->is_auth)
+		{
+			return FALSE;
+		}
+
+		$this->load->library('DX_Auth');
+		if (! $this->dx_auth->is_logged_in()){
+			$this->session->set_userdata('next_segment', $this->_url);
+		}
+		$this->dx_auth->check_uri_permissions();
+	}
+
+	/**
+	 * To set the value for the Auth check
+	 * @param   bool true or false
+	 * @access  private
+	 * @return  void
+	 */
+	protected function set_auth($auth)
+	{
+		$this->is_auth = $auth;
+	}
+
+	/**
+	 * Perform the Auth check
+	 * @access  private
+	 * @return  void
+	 */
+	protected function chk_auth()
+	{
+		if ( ! $this->_chk_auth())
+		{
+			$this->session->set_userdata('next_segment', $this->_url);
+			$this->dx_auth->deny_access('login');
+		}
+	}
+	
+	#
+	# Whether the authentication state?
+	# Only returns TRUE or FALSE
+	protected function chk_auth_pass()
+	{
+		if(!$this->is_auth)
+		{
+			$this->initialize_auth();
+		}
+		
+		if ( $this->_chk_auth())
+		{
+			$this->is_auth = TRUE;
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+		return FALSE;
+	}
+	
+	/**
+	* Authentication initialize setting
+	*/ 
+	protected function initialize_auth()
+	{
+		$this->load->library('session');
+		$this->load->library('DX_Auth');
+		$this->session_flag = TRUE;
+	}
+
+	/**
+	 * Determines whether the authentication page
+	 *
+	 * @access  private
+	 * @return  void
+	 */
+	protected function get_auth()
+	{
+		return $this->is_auth;
+	}
+
+	/**
+	 * To verify the authentication
+	 *
+	 * @access  private
+	 * @return  void
+	 */
+	private function _chk_auth()
+	{
+		if (! $this->dx_auth->is_logged_in()){
+			return FALSE;
+		}
+		return TRUE;
+	}
+
+	/**
+	* Get the user ID
+	*/
+	protected function get_user_id()
+	{
+		if(!$this->is_auth)
+		{
+			return FALSE;
+		}
+		
+		if($this->user_id)
+		{
+			return $this->user_id;
+		}
+		else
+		{
+			$this->user_id = $this->dx_auth->get_user_id();
+			return $this->user_id;
+		}
+	}
+
+	/**
+	 * Pagination settings
+	 */
+	public function generate_pagination($path, $total, $limit=10 , $uri_segment)
+	{
+		$this->load->library('pagination');
+		# Specify the destination URL.
+		$config['base_url']       = $this->config->site_url($path);
+		# Specify the total number.
+		$config['total_rows']     = $total;
+		# Specify the number of items to be displayed on one page.
+		$config['per_page']       = $limit;
+		# Specify whether the page number information is included in any URI segment.
+		$config['uri_segment']    = $uri_segment;
+		# Specify generation link in the template.
+		$config['first_link']     = 'Trang đầu';
+		$config['first_tag_open'] = '<li>';
+		$config['first_tag_close'] = '</li>';
+		$config['last_link']      = 'Trang cuối';
+		$config['last_tag_open'] = '<li>';
+		$config['last_tag_close'] = '</li>';
+		
+		$config['full_tag_open']  = '<ol class="pager">';
+		$config['full_tag_close'] = '</ol>';
+		$config['cur_tag_open'] = '<li class="disabled"><span>';
+		$config['cur_tag_close'] = '</li>';
+		
+		$config['num_tag_open'] = '<li>';
+		$config['num_tag_close'] = '</li>';
+		
+		$config['next_link'] = 'Trang kế';
+		$config['next_tag_open'] = '<li>';
+		$config['next_tag_close'] = '</li>';
+		$config['prev_link'] = 'Trang trước';
+		$config['prev_tag_open'] = '<li>';
+		$config['prev_tag_close'] = '</li>';
+		
+		$config['num_links'] = 4;
+		
+		$this->pagination->initialize($config);
+		return $this->pagination->create_links();
 	}
 }	

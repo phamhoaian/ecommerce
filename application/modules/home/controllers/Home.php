@@ -30,6 +30,6 @@ class Home extends MY_Controller {
 		$this->data['menu_active'] = "home";
 
 		// load view
-		$this->load_view('home', $this->data);
+		$this->load_view('top', $this->data);
 	}
 }
