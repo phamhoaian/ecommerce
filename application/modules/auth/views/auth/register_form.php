@@ -35,58 +35,62 @@ $captcha = array(
 );
 
 ?>
-
-<html>
-<body>
-
-<fieldset><legend>Register</legend>
-<?php echo form_open($this->uri->uri_string())?>
-
-<dl>
-	<dt><?php echo form_label('Username', $username['id']);?></dt>
-	<dd>
-		<?php echo form_input($username)?>
-    <?php echo form_error($username['name']); ?>
-	</dd>
-
-	<dt><?php echo form_label('Password', $password['id']);?></dt>
-	<dd>
-		<?php echo form_password($password)?>
-    <?php echo form_error($password['name']); ?>
-	</dd>
-
-	<dt><?php echo form_label('Confirm Password', $confirm_password['id']);?></dt>
-	<dd>
-		<?php echo form_password($confirm_password);?>
-		<?php echo form_error($confirm_password['name']); ?>
-	</dd>
-
-	<dt><?php echo form_label('Email Address', $email['id']);?></dt>
-	<dd>
-		<?php echo form_input($email);?>
-		<?php echo form_error($email['name']); ?>
-	</dd>
-		
-<?php if ($this->dx_auth->captcha_registration): ?>
-
-	<dt><?php echo form_label('Please enter the characters in the image', $captcha['id']);?></dt>
-	<dd>
-		<?php echo $this->dx_auth->get_captcha_image(); ?>
-	</dd>
-
-	<dt></dt>
-	<dd>
-		<?php echo form_input($captcha)?>
-		<?php echo form_error($captcha['name']); ?>
-	</dd>
-
-<?php endif; ?>
-
-	<dt></dt>
-	<dd><?php echo form_submit('register','Register');?></dd>
-</dl>
-
-<?php echo form_close()?>
-</fieldset>
-</body>
-</html>
+<div class="loginWrapper" style="top:45%;">
+	<div class="widget" id="admin_login" style="height:auto; margin:auto;">
+		<div class="title"><img src="<?php echo public_url('admin/images/icons/dark/laptop.png'); ?>" alt="" class="titleIcon" />
+        	<h6>Đăng ký thành viên</h6>
+        </div>
+        <?php echo form_open($this->uri->uri_string(), "class='form' id='form'")?>
+        <fieldset>
+			<?php echo $this->dx_auth->get_auth_error(); ?>
+			<div class="formRow">
+				<?php echo form_label('Tên tài khoản (<span style="color:#FF0000"><strong>*</strong></span>):', $username['id']);?>
+				<div class="loginInput">
+					<?php echo form_input($username)?>
+            		<?php echo form_error($username['name']); ?>
+				</div>
+                <div class="clear"></div>
+            </div>
+            <div class="formRow">
+				<?php echo form_label('Mật khẩu (<span style="color:#FF0000"><strong>*</strong></span>):', $password['id']);?>
+				<div class="loginInput">
+					<?php echo form_password($password)?>
+            		<?php echo form_error($password['name']); ?>
+				</div>
+                <div class="clear"></div>
+            </div>
+            <div class="formRow">
+				<?php echo form_label('Mật khẩu xác nhận (<span style="color:#FF0000"><strong>*</strong></span>):', $confirm_password['id']);?>
+				<div class="loginInput">
+					<?php echo form_password($confirm_password)?>
+            		<?php echo form_error($confirm_password['name']); ?>
+				</div>
+                <div class="clear"></div>
+            </div>
+            <div class="formRow">
+				<?php echo form_label('Email (<span style="color:#FF0000"><strong>*</strong></span>):', $email['id']);?>
+				<div class="loginInput">
+					<?php echo form_input($email)?>
+            		<?php echo form_error($email['name']); ?>
+				</div>
+                <div class="clear"></div>
+            </div>
+            <?php if ($this->dx_auth->captcha_registration): ?>
+            <div class="formRow">
+				<?php echo form_label('Nhập kí tự trong hình (<span style="color:#FF0000"><strong>*</strong></span>):', $captcha['id']);?>
+				<div class="loginInput">
+					<?php echo $this->dx_auth->get_captcha_image(); ?>
+					<?php echo form_input($captcha)?>
+					<?php echo form_error($captcha['name']); ?>
+				</div>
+                <div class="clear"></div>
+            </div>
+            <?php endif; ?>
+            <div class="loginControl">
+            	<input type="submit"  value="Đăng ký" class="dredB logMeIn" />
+                <div class="clear"></div>
+            </div>
+        </fieldset>
+        <?php echo form_close()?>
+	</div>
+</div>

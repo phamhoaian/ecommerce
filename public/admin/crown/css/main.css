@@ -134,7 +134,7 @@ select[multiple] { border: 1px solid #ddd; box-shadow: 0 0 0 2px #f4f4f4; -webki
 .loginPage .formRow { padding: 18px 14px; }
 
 .loginWrapper { margin: -119px 0 0 -170px; position: absolute; top: 50%; left: 50%; }
-.loginWrapper .widget { width: 340px; background: #f9f9f9; border: 1px solid #cdcdcd; display: block; height: 236px; }
+.loginWrapper .widget { width: 360px; background: #f9f9f9; border: 1px solid #cdcdcd; display: block; height: 236px; }
 .loginLogo { position: absolute; width: 236px; height: 60px; display: block; top: -55px; left: 50%; margin-left: -118px; } 
 .loginControl { border-top: 1px solid #fff; padding: 16px 14px; }
 .logMeIn { float: right; padding: 7px 20px 8px 20px!important; }
@@ -153,7 +153,24 @@ select[multiple] { border: 1px solid #ddd; box-shadow: 0 0 0 2px #f4f4f4; -webki
 
 
 /* ==========  Error and offline pages  ========== */
-
+.alert {
+    text-shadow: 0 1px 0 rgba(255,255,255,.2);
+    -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.25),0 1px 2px rgba(0,0,0,.05);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.25),0 1px 2px rgba(0,0,0,.05);
+    padding: 5px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+.alert-danger {
+    background-image: -webkit-linear-gradient(top,#f2dede 0,#e7c3c3 100%);
+    background-image: -o-linear-gradient(top,#f2dede 0,#e7c3c3 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#f2dede),to(#e7c3c3));
+    background-image: linear-gradient(to bottom,#f2dede 0,#e7c3c3 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff2dede', endColorstr='#ffe7c3c3', GradientType=0);
+    background-repeat: repeat-x;
+    border-color: #dca7a7;
+}
 .errorWrapper { position: absolute; top: 70px; bottom: 0; text-align: center; left: 0; right: 0; height: 430px; }
 .errorWrapper .button { margin-bottom: 30px; }
 .sadEmo { background: url(../images/sadEmo.png) no-repeat; display: block; height: 62px; margin: 0 auto 0px auto; width: 62px; }

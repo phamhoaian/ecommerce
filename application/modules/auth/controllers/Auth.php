@@ -13,11 +13,20 @@ class Auth extends MY_Controller
 	{
 		parent::__construct();
 		
+		// load library
 		$this->load->library('Form_validation');
 		$this->load->library('DX_Auth');
 		
+		// load helper
 		$this->load->helper('url');
 		$this->load->helper('form');
+
+		// load model
+		$this->load->model('auth_model');
+
+		// load language
+        $this->language = $this->config->item('language');
+        $this->auth_lang = $this->lang->load("controller/auth", $this->language, TRUE);
 	}
 	
 	function index()
@@ -32,7 +41,7 @@ class Auth extends MY_Controller
 		$result = $this->dx_auth->is_username_available($username);
 		if ( ! $result)
 		{
-			$this->form_validation->set_message('username_check', 'Username already exist. Please choose another username.');
+			$this->form_validation->set_message('username_check', $this->auth_lang['form_validation']['username_check']);
 		}
 				
 		return $result;
@@ -43,7 +52,7 @@ class Auth extends MY_Controller
 		$result = $this->dx_auth->is_email_available($email);
 		if ( ! $result)
 		{
-			$this->form_validation->set_message('email_check', 'Email is already used by another user. Please choose another email address.');
+			$this->form_validation->set_message('email_check', $this->auth_lang['form_validation']['email_check']);
 		}
 				
 		return $result;
@@ -57,12 +66,12 @@ class Auth extends MY_Controller
 		if ($this->dx_auth->is_captcha_expired())
 		{
 			// Will replace this error msg with $lang
-			$this->form_validation->set_message('captcha_check', 'Confirmation code is expired. Please try again.');			
+			$this->form_validation->set_message('captcha_check', $this->auth_lang['form_validation']['captcha_expired']);			
 			$result = FALSE;
 		}
 		elseif ( ! $this->dx_auth->is_captcha_match($code))
 		{
-			$this->form_validation->set_message('captcha_check', 'The input characters are different. Please try again.');			
+			$this->form_validation->set_message('captcha_check', $this->auth_lang['form_validation']['captcha_not_match']);			
 			$result = FALSE;
 		}
 		return $result;
@@ -74,7 +83,7 @@ class Auth extends MY_Controller
 		$result = $this->dx_auth->is_recaptcha_match();		
 		if ( ! $result)
 		{
-			$this->form_validation->set_message('recaptcha_check', 'Your confirmation code does not match the one in the image. Try again.');
+			$this->form_validation->set_message('recaptcha_check', $this->auth_lang['form_validation']['recaptcha_not_match']);
 		}
 		
 		return $result;
@@ -90,20 +99,36 @@ class Auth extends MY_Controller
 			$val = $this->form_validation;
 			
 			// Set form validation rules
-			$val->set_rules('username', 'Username', 'trim|required');
-			$val->set_rules('password', 'Password', 'trim|required');
-			$val->set_rules('remember', 'Remember me', 'integer');
+			$val->set_error_delimiters('<div class="clear"></div><div class="alert alert-danger">', '</div>');
+			$val->set_rules('username', $this->auth_lang['login']['username'], 'trim|required');
+			$val->set_rules('password', $this->auth_lang['login']['password'], 'trim|required');
+			$val->set_rules('remember', $this->auth_lang['login']['remember'], 'integer');
 
 			// Set captcha rules if login attempts exceed max attempts in config
 			if ($this->dx_auth->is_max_login_attempts_exceeded())
 			{
-				$val->set_rules('captcha', 'Confirmation Code', 'trim|required|callback_captcha_check');
+				$val->set_rules('captcha', $this->auth_lang['login']['captcha'], 'trim|required|callback_captcha_check');
 			}
 				
 			if ($val->run() AND $this->dx_auth->login($val->set_value('username'), $val->set_value('password'), $val->set_value('remember')))
 			{
-				// Redirect to homepage
-				redirect('', 'location');
+				$user_id = $this->dx_auth->get_user_id();
+				$user_permissions = $this->dx_auth->is_admin();
+
+				if($user_id && $user_permissions) 
+				{
+					redirect("cms", 'location');
+				}
+				else 
+				{
+					$next_segment = $this->session->userdata('next_segment');
+					$this->session->unset_userdata('next_segment');
+					if(!$next_segment)
+					{
+						$next_segment = "home";
+					}
+					redirect("$next_segment", 'location');
+				}
 			}
 			else
 			{
@@ -135,7 +160,7 @@ class Auth extends MY_Controller
 		}
 		else
 		{
-			$data['auth_message'] = 'You are already logged in.';
+			$data['auth_message'] = $this->auth_lang['login']['already_logged_in'];
 			$this->load_view($this->dx_auth->logged_in_view, $data, TRUE);
 		}
 	}
@@ -144,7 +169,7 @@ class Auth extends MY_Controller
 	{
 		$this->dx_auth->logout();
 		
-		$data['auth_message'] = 'You have been logged out.';		
+		$data['auth_message'] = $this->auth_lang['logout']['logout_completed'];		
 		$this->load_view($this->dx_auth->logout_view, $data, TRUE);
 	}
 	
@@ -156,15 +181,16 @@ class Auth extends MY_Controller
 			$val = $this->form_validation;
 			
 			// Set form validation rules
-			$val->set_rules('username', 'Username', 'trim|required|min_length['.$this->min_username.']|max_length['.$this->max_username.']|callback_username_check|alpha_dash');
-			$val->set_rules('password', 'Password', 'trim|required|min_length['.$this->min_password.']|max_length['.$this->max_password.']|matches[confirm_password]');
-			$val->set_rules('confirm_password', 'Confirm Password', 'trim|required');
-			$val->set_rules('email', 'Email', 'trim|required|valid_email|callback_email_check');
+			$val->set_error_delimiters('<div class="clear"></div><div class="alert alert-danger">', '</div>');
+			$val->set_rules('username', $this->auth_lang['register']['username'], 'trim|required|min_length['.$this->min_username.']|max_length['.$this->max_username.']|callback_username_check|alpha_dash');
+			$val->set_rules('password', $this->auth_lang['register']['password'], 'trim|required|min_length['.$this->min_password.']|max_length['.$this->max_password.']|matches[confirm_password]');
+			$val->set_rules('confirm_password', $this->auth_lang['register']['confirm_password'], 'trim|required');
+			$val->set_rules('email', $this->auth_lang['register']['email'], 'trim|required|valid_email|callback_email_check');
 			
 			// Is registration using captcha
 			if ($this->dx_auth->captcha_registration)
 			{
-				$val->set_rules('captcha', 'Confirmation Code', 'trim|required|callback_captcha_check');
+				$val->set_rules('captcha', $this->auth_lang['register']['captcha'], 'trim|required|callback_captcha_check');
 			}
 
 			// Run form validation and register user if it's pass the validation
@@ -173,11 +199,11 @@ class Auth extends MY_Controller
 				// Set success message accordingly
 				if ($this->dx_auth->email_activation)
 				{
-					$data['auth_message'] = 'You have successfully registered. Check your email address to activate your account.';
+					$data['auth_message'] = $this->auth_lang['register']['register_complete_email_activation'];
 				}
 				else
 				{					
-					$data['auth_message'] = 'You have successfully registered. '.anchor(site_url($this->dx_auth->login_uri), 'Login');
+					$data['auth_message'] = $this->auth_lang['register']['register_complete'].anchor(site_url($this->dx_auth->login_uri), $this->auth_lang['activate']['login']);
 				}
 				
 				// Load registration success page
@@ -197,31 +223,41 @@ class Auth extends MY_Controller
 		}
 		elseif ( ! $this->dx_auth->allow_registration)
 		{
-			$data['auth_message'] = 'Registration has been disabled.';
+			$data['auth_message'] = $this->auth_lang['register']['disable_registration'];
 			$this->load_view($this->dx_auth->register_disabled_view, $data, TRUE);
 		}
 		else
 		{
-			$data['auth_message'] = 'You have to logout first, before registering.';
+			$data['auth_message'] = $this->auth_lang['register']['logout_first'];
 			$this->load_view($this->dx_auth->logged_in_view, $data, TRUE);
 		}
 	}
 	
 	function activate()
 	{
-		// Get username and key
-		$username = $this->uri->segment(3);
-		$key = $this->uri->segment(4);
+		// Get key
+		$key = $this->security_clean($this->uri->segment(3));
+
+		if(!$key)
+		{
+			$this->message($this->auth_lang['activate']['no_key']);
+		}
+
+		if(!$user_tmp = $this->auth_model->get_one_user_temp_by_key($key)){
+			$this->message($this->auth_lang['activate']['no_user_temp']);
+		}
+
+		$username = $user_tmp->username;
 
 		// Activate user
 		if ($this->dx_auth->activate($username, $key)) 
 		{
-			$data['auth_message'] = 'Your account have been successfully activated. '.anchor(site_url($this->dx_auth->login_uri), 'Login');
+			$data['auth_message'] = $this->auth_lang['activate']['activate_success'].anchor(site_url($this->dx_auth->login_uri), $this->auth_lang['activate']['login']);
 			$this->load_view($this->dx_auth->activate_success_view, $data, TRUE);
 		}
 		else
 		{
-			$data['auth_message'] = 'The activation code you entered was incorrect. Please check your email again.';
+			$data['auth_message'] = $this->auth_lang['activate']['activate_failed'];
 			$this->load_view($this->dx_auth->activate_failed_view, $data, TRUE);
 		}
 	}
@@ -231,12 +267,13 @@ class Auth extends MY_Controller
 		$val = $this->form_validation;
 		
 		// Set form validation rules
-		$val->set_rules('login', 'Username or Email address', 'trim|required');
+		$val->set_error_delimiters('<div class="clear"></div><div class="alert alert-danger">', '</div>');
+		$val->set_rules('login', $this->auth_lang['forgot_password']['email'], 'trim|required');
 
 		// Validate rules and call forgot password function
 		if ($val->run() AND $this->dx_auth->forgot_password($val->set_value('login')))
 		{
-			$data['auth_message'] = 'An email has been sent to your email with instructions with how to activate your new password.';
+			$data['auth_message'] = $this->auth_lang['forgot_password']['forgot_password_success'];
 			$this->load_view($this->dx_auth->forgot_password_success_view, $data, TRUE);
 		}
 		else
@@ -254,12 +291,12 @@ class Auth extends MY_Controller
 		// Reset password
 		if ($this->dx_auth->reset_password($username, $key))
 		{
-			$data['auth_message'] = 'You have successfully reset you password, '.anchor(site_url($this->dx_auth->login_uri), 'Login');
+			$data['auth_message'] = $this->auth_lang['reset_password']['reset_password_success'].anchor(site_url($this->dx_auth->login_uri), $this->auth_lang['reset_password']['login']);
 			$this->load_view($this->dx_auth->reset_password_success_view, $data, TRUE);
 		}
 		else
 		{
-			$data['auth_message'] = 'Reset failed. Your username and key are incorrect. Please check your email again and follow the instructions.';
+			$data['auth_message'] = $this->auth_lang['reset_password']['reset_password_failed'];
 			$this->load_view($this->dx_auth->reset_password_failed_view, $data, TRUE);
 		}
 	}
@@ -272,14 +309,15 @@ class Auth extends MY_Controller
 			$val = $this->form_validation;
 			
 			// Set form validation
-			$val->set_rules('old_password', 'Old Password', 'trim|required|min_length['.$this->min_password.']|max_length['.$this->max_password.']');
-			$val->set_rules('new_password', 'New Password', 'trim|required|min_length['.$this->min_password.']|max_length['.$this->max_password.']|matches[confirm_new_password]');
-			$val->set_rules('confirm_new_password', 'Confirm new Password', 'trim|required');
+			$val->set_error_delimiters('<div class="clear"></div><div class="alert alert-danger">', '</div>');
+			$val->set_rules('old_password', $this->auth_lang['change_password']['old_password'], 'trim|required|min_length['.$this->min_password.']|max_length['.$this->max_password.']');
+			$val->set_rules('new_password', $this->auth_lang['change_password']['new_password'], 'trim|required|min_length['.$this->min_password.']|max_length['.$this->max_password.']|matches[confirm_new_password]');
+			$val->set_rules('confirm_new_password', $this->auth_lang['change_password']['confirm_new_password'], 'trim|required');
 			
 			// Validate rules and change password
 			if ($val->run() AND $this->dx_auth->change_password($val->set_value('old_password'), $val->set_value('new_password')))
 			{
-				$data['auth_message'] = 'Your password has successfully been changed.';
+				$data['auth_message'] = $this->auth_lang['change_password']['change_password_completed'];
 				$this->load_view($this->dx_auth->change_password_success_view, $data, TRUE);
 			}
 			else
@@ -302,13 +340,17 @@ class Auth extends MY_Controller
 			$val = $this->form_validation;
 			
 			// Set form validation rules
-			$val->set_rules('password', 'Password', "trim|required");
+			$val->set_error_delimiters('<div class="clear"></div><div class="alert alert-danger">', '</div>');
+			$val->set_rules('password', $this->auth_lang['cancel_account']['password'], "trim|required");
 			
 			// Validate rules and change password
 			if ($val->run() AND $this->dx_auth->cancel_account($val->set_value('password')))
 			{
 				// Redirect to homepage
-				redirect('', 'location');
+				//redirect('', 'location');
+
+				$this->message($this->auth_lang['cancel_account']['cancel_account_completed']);
+				return FALSE;
 			}
 			else
 			{
@@ -325,7 +367,7 @@ class Auth extends MY_Controller
 	function deny()
 	{
 		
-		$data['auth_message'] = 'Access denied';
+		$data['auth_message'] = $this->auth_lang['deny']['access_denied'];
 		$this->load_view($this->dx_auth->logout_view, $data, TRUE);
 	}
 
