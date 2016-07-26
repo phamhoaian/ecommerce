@@ -1171,7 +1171,7 @@ div.selector span { width: 190px; cursor: pointer; position: absolute; right: 0;
 
 div.checker { width: 15px; height: 15px; position: relative; float: left; }
 div.checker input { width: 15px; height: 15px; opacity: 0; filter: alpha(opacity:0); display: inline-block; background: none; }
-div.checker span { background: transparent url(../images/forms/checkbox.png) no-repeat 0 0px ; vertical-align: middle; height: 15px; width: 15px; display: -moz-inline-box; display: inline-block; text-align: center; }
+div.checker span { background: transparent url(../images/forms/checkbox.png) no-repeat 0 0px ; height: 15px; width: 15px; display: -moz-inline-box; display: inline-block; text-align: center; }
 div.checker span.checked { background-position: center bottom; }
 
 
