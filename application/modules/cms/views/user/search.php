@@ -26,6 +26,11 @@ $attributes = array(
 <!-- /titleArea -->
 <div class="line"></div>
 <div class="wrapper">
+	<?php if($this->session->flashdata("message")) { ?>
+	<div class="alert alert-warning alert-dismissible fade in">
+		<?php echo $this->session->flashdata("message"); ?>
+	</div>
+	<?php } ?>
 	<div class="widget">
 		<div class="title">
 			<span class="titleIcon">

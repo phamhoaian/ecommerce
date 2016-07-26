@@ -27,4 +27,15 @@ class Common_model extends MY_Model {
 		$this->set_table($this->_user_table);
 		return $this->get_count($where);
 	}
+
+	public function get_user_by_id($id)
+	{
+		if(is_numeric($id) && $id)
+		{
+			$this->set_table($this->_user_table);
+			$this->db->join($this->_user_profile_table, "{$this->_user_table}.id = {$this->_user_profile_table}.user_id", "inner");
+			return $this->get_row(array("{$this->_user_table}.id" => $id));
+		}
+		return FALSE;		
+	}
 }
