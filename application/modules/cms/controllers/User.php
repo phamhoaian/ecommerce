@@ -6,7 +6,6 @@ class User extends MY_Controller {
 	function __construct() {
 
 		$this->set_auth(TRUE);
-		$this->set_bench(TRUE);
 
 		parent::__construct();
 
@@ -141,20 +140,37 @@ class User extends MY_Controller {
 		// form validation
 		$this->load->helper('form');
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('username', 'Tên thành viên', 'trim|required|xss_clean');
+		$this->load->library('DX_Auth', 'dx_auth');
+		$this->form_validation->set_rules('username', 'Tên thành viên', 'trim|required|xss_clean|callback_chk_username_duplicate');
 		$this->form_validation->set_rules('password', 'Mật khẩu', 'trim|xss_clean');
 		$this->form_validation->set_rules('confirm_password', 'Mật khẩu (nhập lại)', 'trim|xss_clean|matches[password]');
 		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|xss_clean|callback_chk_email_duplicate');
 		$this->form_validation->set_rules('phone', 'Điện thoại', 'trim|xss_clean');
 
+		// make field required in case insert
+		if(!$this->data["id"])
+		{
+			$this->form_validation->set_rules('password', 'Mật khẩu', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('confirm_password', 'Mật khẩu (nhập lại)', 'trim|required|xss_clean|matches[password]');
+		}
+
 		if($this->form_validation->run())
 		{
-			// prepare data
+			// prepare user data
 			$upd_data = array(
 				'username' => $this->security_clean(set_value('username')),
 				'email' => $this->security_clean(set_value('email')),
 			);
 
+			// encode password
+			$password = $this->security_clean(set_value('password'));
+			if($password)
+			{
+				$password = crypt($this->dx_auth->_encode($password));
+				$upd_data["password"] = $password;
+			}
+
+			// prepare user profile data
 			$upd_data_profile = array(
 				'phone' => $this->security_clean(set_value('phone')),
 			);
@@ -181,10 +197,11 @@ class User extends MY_Controller {
 			{
 				$upd_data["created"] = date('Y-m-d H:i:s', time());
 				$this->data["id"] = $this->common_model->insert($upd_data);
+				$upd_data_profile["user_id"] = $this->data["id"];
 
 				// insert data into table user_profile
 				$this->common_model->set_table('user_profile');
-				$this->common_model->insert($upd_data_profile, array('user_id' => $this->data["id"]));
+				$this->common_model->insert($upd_data_profile);
 				$message = "Thêm mới thành viên thành công!";
 			}
 
@@ -198,6 +215,126 @@ class User extends MY_Controller {
 		}
 	}
 
+	/**
+	 *
+	 * Delete a user by user_id
+	 * @param user_id integer
+	 * @return boolean
+	 *
+	 */
+	public function del()
+	{
+		$user_id = $this->security_clean($this->uri->segment(4, 0));
+		if(is_numeric($user_id) && $user_id)
+		{
+			$user = $this->common_model->get_user_by_id($user_id);
+			if($user)
+			{
+				// delete user
+				$this->common_model->set_table('users');
+				$del_flag = $this->common_model->delete(array('id' => $user_id));
+				if($del_flag)
+				{
+					$this->common_model->set_table('user_profile');
+					$this->common_model->delete(array('user_id' => $user_id));
+					$message = "Xóa thành viên thành công!";
+					$this->session->set_flashdata("message", $message);
+            		redirect("cms/user/search");
+					return TRUE;
+				}
+				else // in case no data
+				{
+					define('RETURN_URL', site_url("cms/user/search"));
+					$this->message("Không có dữ liệu!");
+					return FALSE;
+				}
+			}
+			else // in case user doesn't exists
+			{
+				define('RETURN_URL', site_url("cms/user/search"));
+				$this->message("Thành viên không tồn tại!");
+				return FALSE;
+			}
+		}
+		else // in case user_id isn't integer or empty
+		{
+			define('RETURN_URL', site_url("cms/user/search"));
+			$this->message("Truy cập bị từ chối!");
+			return FALSE;
+		}
+	}
+
+	/**
+	 *
+	 * Delete multi user by list user_id
+	 * @param user_ids array
+	 * @return boolean
+	 *
+	 */
+	public function del_all()
+	{
+		// status flag
+		$status = FALSE;
+
+		// get list user_id
+		$users_ids = $this->security_clean($this->input->post('ids'));
+		
+		if ($users_ids)
+		{
+			$users_ids = implode(",", $users_ids);
+
+			$this->common_model->set_table('users');
+			$del_flag = $this->common_model->delete(array("id IN({$users_ids})" => NULL));
+			if($del_flag)
+			{
+				$this->common_model->set_table('user_profile');
+				$this->common_model->delete(array("id IN({$users_ids})" => NULL));
+				$status = TRUE;
+			}
+		}
+		return $status;
+	}
+
+	/**
+	 *
+	 * Check username duplicate
+	 * @param string
+	 * @return boolean
+	 *
+	 */
+	public function chk_username_duplicate($username)
+	{
+		$this->common_model->set_table('users');
+		if($this->data["id"]) // in case edit
+		{
+			$where = array(
+				'username' => $username,
+				'id !=' => $this->data["id"]
+			);
+		}
+		else // in case insert
+		{
+			$where = array(
+				'username' => $username
+			);
+		}
+
+		if($this->common_model->get_row($where))
+		{
+			$this->form_validation->set_message('chk_username_duplicate', 'Tên thành viên này đã có người sử dụng! Vui lòng nhập tên khác.');
+			return FALSE;
+		}
+
+		return TRUE;
+	}
+
+	/**
+	 *
+	 * Check email duplicate
+	 * @param string
+	 * @return boolean
+	 *
+	 */
 	public function chk_email_duplicate($email)
 	{
 		$this->common_model->set_table('users');

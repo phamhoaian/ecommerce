@@ -1,4 +1,5 @@
 <?php 
+$js_back = "onClick=\"self.location.href='". site_url("cms/user") ."'\"";
 $attributes = array(
 	'class' => 'form',
 	'name' => 'user'
@@ -58,10 +59,10 @@ $phone = array(
 			<div class="clear"></div>
 		</div>
 		<div class="formRow">
-			<label class="formLeft" for="param_name">Mật khẩu:</label>
+			<label class="formLeft" for="param_name">Mật khẩu:<?php if (!$id) : ?><span class="req">*</span><?php endif; ?></label>
 			<div class="formRight">
 				<span class="oneTwo">
-					<?php echo form_input($password); ?>
+					<?php echo form_password($password); ?>
 				</span>
 				<div name="name_error" class="clear error">
 					<?php echo form_error($password["name"]); ?>
@@ -70,10 +71,10 @@ $phone = array(
 			<div class="clear"></div>
 		</div>
 		<div class="formRow">
-			<label class="formLeft" for="param_name">Mật khẩu (nhập lại):</label>
+			<label class="formLeft" for="param_name">Mật khẩu (nhập lại):<?php if (!$id) : ?><span class="req">*</span><?php endif; ?></label>
 			<div class="formRight">
 				<span class="oneTwo">
-					<?php echo form_input($confirm_password); ?>
+					<?php echo form_password($confirm_password); ?>
 				</span>
 				<div name="name_error" class="clear error">
 					<?php echo form_error($confirm_password["name"]); ?>
@@ -106,8 +107,9 @@ $phone = array(
 			<div class="clear"></div>
 		</div>
 		<div class="formSubmit">
-   			<input type="submit" value="Thêm mới" class="redB">
-   			<input type="reset" value="Hủy bỏ" class="basic">
+   			<input type="submit" value="<?php if ($id) : ?>Cập nhật<?php else : ?>Thêm mới<?php endif; ?>" class="dblueB">
+   			<input type="reset" value="Hủy bỏ" class="greyishB">
+   			<input type="button" value="Quay lại" class="basic" <?php echo $js_back; ?>>
    		</div>
    		<div class="clear"></div>
 		<?php echo form_close(); ?>

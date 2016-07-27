@@ -13,7 +13,8 @@ class Common_model extends MY_Model {
 	public function get_all_user($where = NULL, $order_by = '', $limit = 0, $offset = 0)
 	{
 		$this->set_table($this->_user_table);
-		$this->db->join($this->_user_profile_table, "{$this->_user_table}.id = {$this->_user_profile_table}.user_id", "inner");
+		$this->db->select("{$this->_user_table}.*, {$this->_user_profile_table}.phone");
+		$this->db->join($this->_user_profile_table, "{$this->_user_table}.id = {$this->_user_profile_table}.user_id", "left");
 		if (is_int($limit) && $limit > 0) {
 			return $this->get_all($where, $order_by, $limit, $offset);
 		}
@@ -33,7 +34,8 @@ class Common_model extends MY_Model {
 		if(is_numeric($id) && $id)
 		{
 			$this->set_table($this->_user_table);
-			$this->db->join($this->_user_profile_table, "{$this->_user_table}.id = {$this->_user_profile_table}.user_id", "inner");
+			$this->db->select("{$this->_user_table}.*, {$this->_user_profile_table}.phone");
+			$this->db->join($this->_user_profile_table, "{$this->_user_table}.id = {$this->_user_profile_table}.user_id", "left");
 			return $this->get_row(array("{$this->_user_table}.id" => $id));
 		}
 		return FALSE;		

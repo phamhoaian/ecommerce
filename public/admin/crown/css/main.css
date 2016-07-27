@@ -171,6 +171,16 @@ select[multiple] { border: 1px solid #ddd; box-shadow: 0 0 0 2px #f4f4f4; -webki
     background-repeat: repeat-x;
     border-color: #dca7a7;
 }
+.alert-success {
+    background-image: -webkit-linear-gradient(top,#4CAF50 0,#56d058 100%);
+    background-image: -o-linear-gradient(top,#4CAF50 0,#56d058 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#4CAF50),to(#56d058));
+    background-image: linear-gradient(to bottom,#4CAF50 0,#56d058 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff4CAF50', endColorstr='#ff56d058', GradientType=0);
+    background-repeat: repeat-x;
+    border-color: #56d058;
+    color: #FFF;
+}
 .errorWrapper { position: absolute; top: 70px; bottom: 0; text-align: center; left: 0; right: 0; height: 430px; }
 .errorWrapper .button { margin-bottom: 30px; }
 .sadEmo { background: url(../images/sadEmo.png) no-repeat; display: block; height: 62px; margin: 0 auto 0px auto; width: 62px; }

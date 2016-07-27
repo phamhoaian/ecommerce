@@ -27,7 +27,7 @@ $attributes = array(
 <div class="line"></div>
 <div class="wrapper">
 	<?php if($this->session->flashdata("message")) { ?>
-	<div class="alert alert-warning alert-dismissible fade in">
+	<div class="alert alert-success">
 		<?php echo $this->session->flashdata("message"); ?>
 	</div>
 	<?php } ?>
@@ -58,7 +58,7 @@ $attributes = array(
 			<tbody>
 			<?php if ($list_user) { ?>
 				<?php foreach ($list_user as $user) { ?>
-				<tr>
+				<tr class="row_<?php echo $user["id"]; ?>">
 					<td>
 						<div class="checker" id="uniform-undefined">
 							<span>
