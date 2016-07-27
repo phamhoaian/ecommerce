@@ -6,15 +6,18 @@ class Common_model extends MY_Model {
 	function __construct() {
 
 		parent::__construct();
-		$this->_user_table = "users";
-		$this->_user_profile_table = "user_profile";
+		$this->_prefix = $this->config->item('DX_table_prefix');
+		$this->_user_table = $this->_prefix.$this->config->item('DX_users_table');	;
+		$this->_user_profile_table = $this->_prefix.$this->config->item('DX_user_profile_table');	;
+		$this->_roles_table = $this->_prefix.$this->config->item('DX_roles_table');
 	}
 
 	public function get_all_user($where = NULL, $order_by = '', $limit = 0, $offset = 0)
 	{
 		$this->set_table($this->_user_table);
-		$this->db->select("{$this->_user_table}.*, {$this->_user_profile_table}.phone");
+		$this->db->select("{$this->_user_table}.*, {$this->_user_profile_table}.phone, {$this->_roles_table}.name AS role_name");
 		$this->db->join($this->_user_profile_table, "{$this->_user_table}.id = {$this->_user_profile_table}.user_id", "left");
+		$this->db->join($this->_roles_table, "{$this->_user_table}.role_id = {$this->_roles_table}.id", "inner");
 		if (is_int($limit) && $limit > 0) {
 			return $this->get_all($where, $order_by, $limit, $offset);
 		}

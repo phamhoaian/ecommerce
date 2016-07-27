@@ -27,8 +27,11 @@ $attributes = array(
 <div class="line"></div>
 <div class="wrapper">
 	<?php if($this->session->flashdata("message")) { ?>
-	<div class="alert alert-success">
-		<?php echo $this->session->flashdata("message"); ?>
+	<div class="nNote nInformation hideit">
+		<p>
+			<strong>Thông báo: </strong>
+			<?php echo $this->session->flashdata("message"); ?>
+		</p>
 	</div>
 	<?php } ?>
 	<div class="widget">
@@ -52,6 +55,10 @@ $attributes = array(
 					<td>Tên</td>
 					<td>Email</td>
 					<td>Điện thoại</td>
+					<td>Phân quyền</td>
+					<td>Bị chặn</td>
+					<td>Ngày tạo</td>
+					<td>Đăng nhập lần cuối</td>
 					<td style="width:100px;"></td>
 				</tr>
 			</thead>
@@ -74,6 +81,10 @@ $attributes = array(
 						<span class="tipS" original-title="<?php echo $user['email']; ?>"><?php echo $user['email']; ?></span>
 					</td>
 					<td><?php echo $user['phone']; ?></td>
+					<td class="textC"><?php echo $user['role_name']; ?></td>
+					<td class="textC"><?php if ($user['banned']) : ?>Có<?php else : ?>Không<?php endif; ?></td>
+					<td class="textC"><?php echo date('d/m/Y H:i:s', strtotime($user['created'])); ?></td>
+					<td class="textC"><?php echo date('d/m/Y H:i:s', strtotime($user['last_login'])); ?></td>
 					<td class="option">
 					 	<a href="<?php echo site_url('cms/user/form/'.$user['id']); ?>" class="tipS " original-title="Chỉnh sửa">
 							<img src="<?php echo public_url('admin/images/icons/color/edit.png'); ?>">
@@ -86,13 +97,13 @@ $attributes = array(
 				<?php } ?>
 			<?php } else { ?>
 				<tr>
-					<td colspan="7">Không có dữ liệu.</td>
+					<td colspan="10">Không có dữ liệu.</td>
 				</tr>
 			<?php } ?>
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="7">
+					<td colspan="10">
 				     	<div class="list_action itemActions">
 							<a href="#submit" id="submit" class="button blueB" url="<?php echo site_url('cms/user/del_all'); ?>">
 								<span style="color:white;">Xóa hết</span>
