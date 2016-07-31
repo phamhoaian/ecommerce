@@ -130,8 +130,6 @@ class User extends MY_Controller {
 		{
 			$this->data["user"] = array(
 				'username' => '',
-				'password' => '',
-				'confirm_password' => '',
 				'email' => '',
 				'phone' => ''
 			);
@@ -142,17 +140,8 @@ class User extends MY_Controller {
 		$this->load->library('form_validation');
 		$this->load->library('DX_Auth', 'dx_auth');
 		$this->form_validation->set_rules('username', 'Tên thành viên', 'trim|required|xss_clean|callback_chk_username_duplicate');
-		$this->form_validation->set_rules('password', 'Mật khẩu', 'trim|xss_clean');
-		$this->form_validation->set_rules('confirm_password', 'Mật khẩu (nhập lại)', 'trim|xss_clean|matches[password]');
 		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|xss_clean|callback_chk_email_duplicate');
 		$this->form_validation->set_rules('phone', 'Điện thoại', 'trim|xss_clean');
-
-		// make field required in case insert
-		if(!$this->data["id"])
-		{
-			$this->form_validation->set_rules('password', 'Mật khẩu', 'trim|required|xss_clean');
-			$this->form_validation->set_rules('confirm_password', 'Mật khẩu (nhập lại)', 'trim|required|xss_clean|matches[password]');
-		}
 
 		if($this->form_validation->run())
 		{
@@ -161,14 +150,6 @@ class User extends MY_Controller {
 				'username' => $this->security_clean(set_value('username')),
 				'email' => $this->security_clean(set_value('email')),
 			);
-
-			// encode password
-			$password = $this->security_clean(set_value('password'));
-			if($password)
-			{
-				$password = crypt($this->dx_auth->_encode($password));
-				$upd_data["password"] = $password;
-			}
 
 			// prepare user profile data
 			$upd_data_profile = array(
@@ -293,6 +274,119 @@ class User extends MY_Controller {
 			}
 		}
 		return $status;
+	}
+
+	/**
+	 *
+	 * Banned multi user by list user_id
+	 * @param user_ids array
+	 * @return boolean
+	 *
+	 */
+	public function ban()
+	{
+		// get list user_id
+		$users_ids = $this->security_clean($this->input->post('id'));
+
+		if ($users_ids)
+		{
+			$count = count($users_ids);
+			$users_ids = implode(",", $users_ids);
+
+			// update 
+			$this->common_model->set_table('users');
+			$this->common_model->update(array("banned" => 1), array("id IN({$users_ids})" => NULL));
+
+			// flash message
+            $this->session->set_flashdata("message", "Có {$count} thành viên vừa cập nhật!");
+		}
+
+		$jump_url = site_url("cms/user/search");
+        header("Location: $jump_url");
+	}
+
+	/**
+	 *
+	 * Unbanned multi user by list user_id
+	 * @param user_ids array
+	 * @return boolean
+	 *
+	 */
+	public function unban()
+	{
+		// get list user_id
+		$users_ids = $this->security_clean($this->input->post('id'));
+
+		if ($users_ids)
+		{
+			$count = count($users_ids);
+			$users_ids = implode(",", $users_ids);
+
+			// update 
+			$this->common_model->set_table('users');
+			$this->common_model->update(array("banned" => 0), array("id IN({$users_ids})" => NULL));
+
+			// flash message
+            $this->session->set_flashdata("message", "Có {$count} thành viên vừa cập nhật!");
+		}
+
+		$jump_url = site_url("cms/user/search");
+        header("Location: $jump_url");
+	}
+
+	/**
+	 *
+	 * Reset password multi user by list user_id
+	 * @param user_ids array
+	 * @return boolean
+	 *
+	 */
+	public function reset_password()
+	{
+		// load model
+		$this->load->model('dx_auth/users', 'users');
+
+		// get list user_id
+		$users_ids = $this->security_clean($this->input->post('id'));
+
+		if ($users_ids)
+		{
+			$count = 0;
+
+			foreach ($users_ids as $row) {
+				// Get user and check if User ID exist
+				if ($query = $this->users->get_user_by_id($row) AND $query->num_rows() == 1)
+				{		
+					// Get user record				
+					$user = $query->row();
+					
+					// Create new key, password and send email to user
+					if ($this->dx_auth->forgot_password($user->username))
+					{
+						// Query once again, because the database is updated after calling forgot_password.
+						$query = $this->users->get_user_by_id($row);
+						// Get user record
+						$user = $query->row();
+													
+						// Reset the password
+						if ($this->dx_auth->reset_password($user->username, $user->newpass_key))
+						{							
+							$count++;
+						}
+					}
+				}
+			}
+
+			if($count > 0)
+			{
+				// flash message
+            	$this->session->set_flashdata("message", "Có {$count} thành viên vừa được lấy lại mật khẩu!");
+			}
+			
+		}
+
+		$jump_url = site_url("cms/user/search");
+        header("Location: $jump_url");
 	}
 
 	/**

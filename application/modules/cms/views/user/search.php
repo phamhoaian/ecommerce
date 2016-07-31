@@ -3,6 +3,9 @@ $attributes = array(
 	'class' => 'form',
 	'name' => 'filter'
 );
+$hidden = array(
+    "boxChecked" => 0
+);
 ?>
 <div class="titleArea">
 	<div class="wrapper">
@@ -46,7 +49,7 @@ $attributes = array(
 			<h6>Danh sách Thành viên</h6>
 		 	<div class="num f12">Tổng số: <b><?php echo (int) $count; ?></b></div>
 		</div>
-		<?php echo form_open_multipart($this->uri->uri_string(), $attributes); ?>
+		<?php echo form_open_multipart($this->uri->uri_string(), $attributes, $hidden); ?>
 		<table cellpadding="0" cellspacing="0" width="100%" class="sTable mTable myTable withCheck" id="checkAll">
 			<thead>
 				<tr>
@@ -56,7 +59,7 @@ $attributes = array(
 					<td>Email</td>
 					<td>Điện thoại</td>
 					<td>Phân quyền</td>
-					<td>Bị chặn</td>
+					<td>Bị khóa</td>
 					<td>Ngày tạo</td>
 					<td>Đăng nhập lần cuối</td>
 					<td style="width:100px;"></td>
@@ -107,6 +110,15 @@ $attributes = array(
 				     	<div class="list_action itemActions">
 							<a href="#submit" id="submit" class="button blueB" url="<?php echo site_url('cms/user/del_all'); ?>">
 								<span style="color:white;">Xóa hết</span>
+							</a>
+							<a href="javascript:void(0)" class="do_action button redB" url="<?php echo site_url('cms/user/ban'); ?>">
+								<span style="color:white;">Khóa tài khoản</span>
+							</a>
+							<a href="javascript:void(0)" class="do_action button brownB" url="<?php echo site_url('cms/user/unban'); ?>">
+								<span style="color:white;">Mở khóa tài khoản</span>
+							</a>
+							<a href="javascript:void(0)" class="do_action button greenB" url="<?php echo site_url('cms/user/reset_password'); ?>">
+								<span style="color:white;">Lấy lại mật khẩu</span>
 							</a>
 					 	</div>
 					     <div class="pagination"><?php echo $pagination; ?></div>

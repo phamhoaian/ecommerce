@@ -9,14 +9,6 @@ $username = array(
 	'id' => 'username',
 	'value' => set_value("username", $user["username"])
 );
-$password = array(
-	'name' => 'password',
-	'id' => 'password'
-);
-$confirm_password = array(
-	'name' => 'confirm_password',
-	'id' => 'confirm_password'
-);
 $email = array(
 	'name' => 'email',
 	'id' => 'email',
@@ -54,30 +46,6 @@ $phone = array(
 				</span>
 				<div name="name_error" class="clear error">
 					<?php echo form_error($username["name"]); ?>
-				</div>
-			</div>
-			<div class="clear"></div>
-		</div>
-		<div class="formRow">
-			<label class="formLeft" for="param_name">Mật khẩu:<?php if (!$id) : ?><span class="req">*</span><?php endif; ?></label>
-			<div class="formRight">
-				<span class="oneTwo">
-					<?php echo form_password($password); ?>
-				</span>
-				<div name="name_error" class="clear error">
-					<?php echo form_error($password["name"]); ?>
-				</div>
-			</div>
-			<div class="clear"></div>
-		</div>
-		<div class="formRow">
-			<label class="formLeft" for="param_name">Mật khẩu (nhập lại):<?php if (!$id) : ?><span class="req">*</span><?php endif; ?></label>
-			<div class="formRight">
-				<span class="oneTwo">
-					<?php echo form_password($confirm_password); ?>
-				</span>
-				<div name="name_error" class="clear error">
-					<?php echo form_error($confirm_password["name"]); ?>
 				</div>
 			</div>
 			<div class="clear"></div>
