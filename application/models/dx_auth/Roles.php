@@ -29,10 +29,8 @@ class Roles extends MY_Model
 	
 	function get_role_by_id($role_id)
 	{
-		$where = array(
-			'id' => $role_id
-		);
-		return $this->get_row($where);
+		$this->db->where('id', $role_id);
+		return $this->db->get($this->_table);
 	}
 	
 	function create_role($name, $parent_id = 0)
@@ -51,5 +49,13 @@ class Roles extends MY_Model
 			'id' => $role_id
 		);
 		return $this->delete();		
+	}
+
+	function update_role($data, $role_id)
+	{
+		$where = array(
+			'id' => $role_id
+		);
+		return $this->update($data, $where);		
 	}
 }

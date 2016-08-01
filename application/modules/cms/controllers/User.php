@@ -404,7 +404,7 @@ class User extends MY_Controller {
 	/**
 	 *
 	 * List roles
-	 * @return boolean
+	 * @return void
 	 *
 	 */
 	public function roles()
@@ -457,6 +457,137 @@ class User extends MY_Controller {
 
 		// load view
 		$this->load_view('user/roles', $this->data);
+	}
+
+	/**
+	 * Add new or edit a role
+	 * @param id integer (NULL: add; !=NULL: edit)
+	 * @return void
+	 */
+	public function form_role()
+	{
+		// load model
+		$this->load->model('dx_auth/roles', 'roles');
+
+		// menu active
+		$this->data['menu_active'] = "account";
+		$this->data['submenu_active'] = "roles";
+		
+		// get role id 
+		$this->data["id"] = $this->security_clean($this->uri->segment(4, 0));
+
+		// page title
+		if ($this->data["id"])
+		{
+			$this->data["page_title"] = "Chỉnh sửa thông tin nhóm quản trị";
+		}
+		else
+		{
+			$this->data["page_title"] = "Thêm nhóm quản trị";
+		}
+
+		// prepare user information
+		if($this->data["id"])
+		{
+			$this->data["role"] = $this->roles->get_role_by_id($this->data["id"])->row_array();
+			if(!$this->data["role"])
+			{
+				$this->session->set_flashdata("error", "Nhóm quản trị không tồn tại!");
+                redirect("cms/user/roles");
+			}
+		}
+		else
+		{
+			$this->data["role"] = array(
+				'name' => '',
+				'parent_id' => ''
+			);
+		}
+
+		// list roles
+		$this->data["roles"] = $this->roles->get_all_role(NULL, 'id DESC');
+		if ( $this->data["id"] )
+		{
+			$this->data["roles"] = $this->roles->get_all_role(array("id !=" => $this->data["id"]));
+		}
+
+		// form validation
+		$this->load->helper('form');
+		$this->load->library('form_validation');
+		$this->load->library('DX_Auth', 'dx_auth');
+		$this->form_validation->set_rules('name', 'Tên nhóm quản trị', 'trim|required|xss_clean|callback_chk_role_name_duplicate');
+		$this->form_validation->set_rules('parent', 'Nhóm cha', 'trim|xss_clean');
+
+		if($this->form_validation->run())
+		{
+			// prepare role data
+			$upd_data = array(
+				'name' => $this->security_clean(set_value('name')),
+				'parent_id' => $this->security_clean(set_value('parent')),
+			);
+
+			// insert data into table roles
+			$message = "";
+			if($this->data["id"]) // in case update
+			{
+				if($this->roles->update_role($upd_data, $this->data["id"]))
+				{
+					$message = "Cập nhật thông tin nhóm quản trị thành công!";
+				}
+				else 
+				{
+					$message = "Cập nhật thất bại!";
+				}
+			}
+			else // in case insert
+			{
+				if($this->roles->create_role($this->security_clean(set_value('name')), $this->security_clean(set_value('parent_id'))))
+				{
+					$message = "Thêm mới nhóm quản trị thành công!";
+				}
+				else
+				{
+					$message = "Thêm mới nhóm quản trị thất bại!";
+				}
+			}
+
+			$this->session->set_flashdata("message", $message);
+            redirect("cms/user/roles");
+		} 
+		else 
+		{
+			// load view
+			$this->load_view('user/form_role', $this->data);
+		}
+	}
+
+	/**
+	 *
+	 * Delete multi roles by list user_id
+	 * @param role_ids array
+	 * @return boolean
+	 *
+	 */
+	public function del_role_all()
+	{
+		// status flag
+		$status = FALSE;
+
+		// get list user_id
+		$role_ids = $this->security_clean($this->input->post('ids'));
+		
+		if ($role_ids)
+		{
+			$role_ids = implode(",", $role_ids);
+
+			$this->common_model->set_table('roles');
+			$del_flag = $this->common_model->delete(array("id IN({$role_ids})" => NULL));
+			if($del_flag)
+			{
+				$status = TRUE;
+			}
+		}
+		return $status;
 	}
 
 	/**
@@ -519,6 +650,39 @@ class User extends MY_Controller {
 		if($this->common_model->get_row($where))
 		{
 			$this->form_validation->set_message('chk_email_duplicate', 'Email này đã có! Vui lòng nhập email khác.');
+			return FALSE;
+		}
+
+		return TRUE;
+	}
+
+	/**
+	 *
+	 * Check role name duplicate
+	 * @param string
+	 * @return boolean
+	 *
+	 */
+	public function chk_role_name_duplicate($name)
+	{
+		$this->common_model->set_table('roles');
+		if($this->data["id"]) // in case edit
+		{
+			$where = array(
+				'name' => $name,
+				'id !=' => $this->data["id"]
+			);
+		}
+		else // in case insert
+		{
+			$where = array(
+				'name' => $name
+			);
+		}
+
+		if($this->common_model->get_row($where))
+		{
+			$this->form_validation->set_message('chk_role_name_duplicate', 'Tên nhóm quản trị này đã có! Vui lòng nhập tên khác.');
 			return FALSE;
 		}
 
