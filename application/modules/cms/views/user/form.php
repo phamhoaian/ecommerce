@@ -19,6 +19,25 @@ $phone = array(
 	'id' => 'phone',
 	'value' => set_value("phone", $user["phone"])
 );
+$password = array(
+	'name' => 'password',
+	'id' => 'password',
+	'value' => ''
+);
+$confirm_password = array(
+	'name' => 'confirm_password',
+	'id' => 'confirm_password',
+	'value' => ''
+);
+$role = array();
+$role_selected = "";
+foreach ($roles as $item) {
+	if($item["id"] == $user["role_id"])
+	{
+		$role_selected = set_value("role", $user["role_id"]);
+	}
+	$role[$item["id"]] = $item["name"];
+}
 ?>
 <div class="titleArea">
 	<div class="wrapper">
@@ -39,7 +58,7 @@ $phone = array(
 			<h6><?php echo $page_title; ?></h6>
 		</div>
 		<div class="formRow">
-			<label class="formLeft" for="param_name">Tên thành viên:<span class="req">*</span></label>
+			<label class="formLeft" for="username">Tên thành viên:<span class="req">*</span></label>
 			<div class="formRight">
 				<span class="oneTwo">
 					<?php echo form_input($username); ?>
@@ -50,8 +69,48 @@ $phone = array(
 			</div>
 			<div class="clear"></div>
 		</div>
+		<?php if($id) : ?>
 		<div class="formRow">
-			<label class="formLeft" for="param_name">Email:<span class="req">*</span></label>
+			<label class="formLeft" for="username">Nhóm quản trị:<span class="req">*</span></label>
+			<div class="formRight">
+				<span class="oneTwo">
+					<?php echo form_dropdown('role', $role, $role_selected, 'id="role"'); ?>
+				</span>
+				<div name="name_error" class="clear error">
+					<?php echo form_error('role'); ?>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<?php endif; ?>
+		<?php if(!$id) : ?>
+		<div class="formRow">
+			<label class="formLeft" for="password">Mật khẩu:<span class="req">*</span></label>
+			<div class="formRight">
+				<span class="oneTwo">
+					<?php echo form_password($password); ?>
+				</span>
+				<div name="name_error" class="clear error">
+					<?php echo form_error($password["name"]); ?>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="formRow">
+			<label class="formLeft" for="confirm_password">Mật khẩu (nhập lại):<span class="req">*</span></label>
+			<div class="formRight">
+				<span class="oneTwo">
+					<?php echo form_password($confirm_password); ?>
+				</span>
+				<div name="name_error" class="clear error">
+					<?php echo form_error($confirm_password["name"]); ?>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<?php endif; ?>
+		<div class="formRow">
+			<label class="formLeft" for="email">Email:<span class="req">*</span></label>
 			<div class="formRight">
 				<span class="oneTwo">
 					<?php echo form_input($email); ?>
@@ -63,7 +122,7 @@ $phone = array(
 			<div class="clear"></div>
 		</div>
 		<div class="formRow">
-			<label class="formLeft" for="param_name">Điện thoại:</label>
+			<label class="formLeft" for="phone">Điện thoại:</label>
 			<div class="formRight">
 				<span class="oneTwo">
 					<?php echo form_input($phone); ?>

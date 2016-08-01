@@ -131,9 +131,14 @@ class User extends MY_Controller {
 			$this->data["user"] = array(
 				'username' => '',
 				'email' => '',
-				'phone' => ''
+				'phone' => '',
+				'role_id' => ''
 			);
 		}
+
+		// list roles
+		$this->load->model('dx_auth/roles', 'roles');
+		$this->data["roles"] = $this->roles->get_all()->result_array();
 
 		// form validation
 		$this->load->helper('form');
@@ -142,6 +147,12 @@ class User extends MY_Controller {
 		$this->form_validation->set_rules('username', 'Tên thành viên', 'trim|required|xss_clean|callback_chk_username_duplicate');
 		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|xss_clean|callback_chk_email_duplicate');
 		$this->form_validation->set_rules('phone', 'Điện thoại', 'trim|xss_clean');
+
+		if(!$this->data["id"])
+		{
+			$this->form_validation->set_rules('password', 'Mật khẩu', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('confirm_password', 'Mật khẩu (nhập lại)', 'trim|required|xss_clean|matches[password]');
+		}
 
 		if($this->form_validation->run())
 		{
@@ -162,6 +173,7 @@ class User extends MY_Controller {
 			if($this->data["id"]) // in case update
 			{
 				$upd_data["modified"] = date('Y-m-d H:i:s', time());
+				$upd_data["role_id"] = $this->security_clean(set_value('role'));
 				if($this->common_model->update($upd_data, array('id' => $this->data["id"])))
 				{
 					// insert data into table user_profile
@@ -176,14 +188,14 @@ class User extends MY_Controller {
 			}
 			else // in case insert
 			{
-				$upd_data["created"] = date('Y-m-d H:i:s', time());
-				$this->data["id"] = $this->common_model->insert($upd_data);
-				$upd_data_profile["user_id"] = $this->data["id"];
-
-				// insert data into table user_profile
-				$this->common_model->set_table('user_profile');
-				$this->common_model->insert($upd_data_profile);
-				$message = "Thêm mới thành viên thành công!";
+				if($this->dx_auth->register($this->security_clean(set_value('username')), $this->security_clean(set_value('password')), $this->security_clean(set_value('email'))))
+				{
+					$message = "Thêm mới thành viên thành công!";
+				}
+				else
+				{
+					$message = "Thêm mới thành viên thất bại!";
+				}
 			}
 
 			$this->session->set_flashdata("message", $message);
