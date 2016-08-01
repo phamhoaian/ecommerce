@@ -156,6 +156,30 @@
 			})
 			return false;
 		});
+
+		$list_action.find('.do_action').click(function(){
+			var ids = new Array();
+			$('[name="id[]"]:checked').each(function()
+			{
+				ids.push($(this).val());
+			});
+		
+			if (!ids.length)
+			{
+				alert('Hãy lựa chọn ít nhất một từ danh sách.');
+			}
+			else
+			{
+				// get url from attribute url
+				var url  = $(this).attr('url');
+
+				// form
+				$form = $(this).closest("form");
+				$form.attr('action', url);
+				$form.submit();
+
+			}
+		});
 		
 		// Form filter handle
 		var form = $('form[name=filter]');

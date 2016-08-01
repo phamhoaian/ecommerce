@@ -47,7 +47,7 @@
 			</ul>	
 		</li>
 		<li class="account">
-			<a href="admin/account.html" class="exp <?php if(isset($menu_active) && $menu_active == "account") : ?>active<?php endif; ?>">
+			<a href="javascript:void(0)" class="exp <?php if(isset($menu_active) && $menu_active == "account") : ?>active" id="current"<?php else : ?>"<?php endif; ?>>
 				<span>Tài khoản</span>
 				<strong>3</strong>
 			</a>
@@ -55,11 +55,11 @@
 				<li <?php if(isset($submenu_active) && $submenu_active == "admin") : ?>class="this"<?php endif; ?>>
 					<a href="">Ban quản trị</a>
 				</li>
-				<li <?php if(isset($submenu_active) && $submenu_active == "admin_group") : ?>class="this"<?php endif; ?>>
-					<a href="">Nhóm quản trị</a>
+				<li <?php if(isset($submenu_active) && $submenu_active == "roles") : ?>class="this"<?php endif; ?>>
+					<a href="<?php echo site_url('cms/user/roles'); ?>">Nhóm quản trị</a>
 				</li>
 				<li <?php if(isset($submenu_active) && $submenu_active == "user") : ?>class="this"<?php endif; ?>>
-					<a href="">Thành viên</a>
+					<a href="<?php echo site_url('cms/user'); ?>">Thành viên</a>
 				</li>
 			</ul>	
 		</li>
