@@ -403,6 +403,64 @@ class User extends MY_Controller {
 
 	/**
 	 *
+	 * List roles
+	 * @return boolean
+	 *
+	 */
+	public function roles()
+	{
+		// breadcrumbs
+		$this->data['position'] = $this->load->view("parts/position", $this->position, TRUE);
+
+		// menu active
+		$this->data['menu_active'] = "account";
+		$this->data['submenu_active'] = "roles";
+
+		// offset
+		$offset = $this->security_clean($this->uri->segment(4, 0));
+
+		// load model
+		$this->load->model('dx_auth/roles', 'roles');
+
+		// get list roles
+		$this->data['list_roles'] = $this->roles->get_all_role(NULL, 'id DESC', $this->limit, $offset);
+		$this->data['count'] = $this->roles->get_count_role();
+
+		// generate pagination
+		$path = $this->uri->slash_segment(1, 0).$this->uri->slash_segment(2, 0).$this->uri->slash_segment(3, 0);
+		$this->data['pagination'] = $this->generate_pagination($path, $this->data['count'], $this->limit, 4);
+
+		// meta title
+		if ($offset && !empty($this->data['list_roles'])){
+            $this->data["title"] .= " (" . ((int) ($offset / $this->limit) + 1) . ")";
+        }
+
+        // link rel
+        $this->data["link_rel"] = "";
+		if ($offset) {
+			$tmp_offset = (int) ($offset - $this->limit);
+			if (!$tmp_offset) {
+				$tmp_offset = "";
+			}
+
+			if (!$tmp_offset) {
+				$this->data["link_rel"] .= '<link rel="prev" href="' . site_url("cms/user/roles") . '" />' . "\n";
+			} else {
+				$this->data["link_rel"] .= '<link rel="prev" href="' . site_url("cms/user/roles/" . $tmp_offset) . '" />' . "\n";
+			}
+		}
+		
+		if ($this->data["count"] > ($offset + $this->limit)) {
+			$tmp_offset = $offset + $this->limit;
+			$this->data["link_rel"] .= '<link rel="next" href="' . site_url("cms/user/roles/" . $tmp_offset) . '" />' . "\n";
+		}
+
+		// load view
+		$this->load_view('user/roles', $this->data);
+	}
+
+	/**
+	 *
 	 * Check username duplicate
 	 * @param string
 	 * @return boolean

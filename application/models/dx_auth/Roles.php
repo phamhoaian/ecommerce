@@ -1,6 +1,6 @@
 <?php
 
-class Roles extends CI_Model 
+class Roles extends MY_Model 
 {
 	function __construct()
 	{
@@ -9,18 +9,30 @@ class Roles extends CI_Model
 		// Other stuff
 		$this->_prefix = $this->config->item('DX_table_prefix');
 		$this->_table = $this->_prefix.$this->config->item('DX_roles_table');
+
+		$this->set_table($this->_table);
 	}
 	
-	function get_all()
+	function get_all_role($where = NULL, $order_by = '', $limit = 0, $offset = 0)
 	{
-		$this->db->order_by('id', 'asc');
-		return $this->db->get($this->_table);
+		if($limit > 0)
+		{
+			return $this->get_all($where, $order_by, $limit, $offset);
+		}
+		return $this->get_all($where, $order_by);
+	}
+
+	function get_count_role($where = NULL)
+	{
+		return $this->get_count($where);
 	}
 	
 	function get_role_by_id($role_id)
 	{
-		$this->db->where('id', $role_id);
-		return $this->db->get($this->_table);
+		$where = array(
+			'id' => $role_id
+		);
+		return $this->get_row($where);
 	}
 	
 	function create_role($name, $parent_id = 0)
@@ -30,12 +42,14 @@ class Roles extends CI_Model
 			'parent_id' => $parent_id
 		);
             
-		$this->db->insert($this->_table, $data);
+		return $this->insert($data);
 	}
 	
 	function delete_role($role_id)
 	{
-		$this->db->where('id', $role_id);
-		$this->db->delete($this->_table);		
+		$where = array(
+			'id' => $role_id
+		);
+		return $this->delete();		
 	}
 }

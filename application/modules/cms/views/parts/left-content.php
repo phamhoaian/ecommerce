@@ -55,8 +55,8 @@
 				<li <?php if(isset($submenu_active) && $submenu_active == "admin") : ?>class="this"<?php endif; ?>>
 					<a href="">Ban quản trị</a>
 				</li>
-				<li <?php if(isset($submenu_active) && $submenu_active == "admin_group") : ?>class="this"<?php endif; ?>>
-					<a href="">Nhóm quản trị</a>
+				<li <?php if(isset($submenu_active) && $submenu_active == "roles") : ?>class="this"<?php endif; ?>>
+					<a href="<?php echo site_url('cms/user/roles'); ?>">Nhóm quản trị</a>
 				</li>
 				<li <?php if(isset($submenu_active) && $submenu_active == "user") : ?>class="this"<?php endif; ?>>
 					<a href="<?php echo site_url('cms/user'); ?>">Thành viên</a>
