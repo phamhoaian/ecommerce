@@ -683,7 +683,7 @@ class DX_Auth
 	// Check is user is has admin privilege
 	function is_admin()
 	{
-		return strtolower($this->ci->session->userdata('DX_role_name')) == 'admin';
+		return strtolower($this->ci->session->userdata('DX_role_id')) == 2;
 	}
 	
 	// Check if user has $roles privilege

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <link rel="shortcut icon" href="favicon.ico" >
+    <link rel="shortcut icon" href="<?php echo base_url('favicon.ico'); ?>" >
     <?php
     if(isset($title) && $title)
     {
@@ -55,6 +55,12 @@
     <script src="<?php echo public_url('js/custom_admin.js'); ?>" type="text/javascript"></script>
     <?php echo $css;?>
     <?php echo $js;?>
+    <?php
+        if(isset($link_rel))
+        {
+            print $link_rel;
+        }
+    ?>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -70,6 +76,7 @@
         <?php echo $this->load->view('parts/top-nav'); ?>
         <!-- /topNav -->
         <?php echo $main;?>
+        <div class="clear"></div>
     </div>
     <!-- /rightSide -->
     <div class="clear"></div>

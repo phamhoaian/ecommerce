@@ -1,0 +1,6 @@
+diff a/public/admin/css/css.css b/public/admin/css/css.css	(rejected hunks)
+@@ -0,4 +0,3 @@
+-@import "core/reset.css";
+
+
+ * Fix css of admin
