@@ -11,7 +11,7 @@ $hidden = array(
 	<div class="wrapper">
 		<div class="pageTitle">
 			<h5>Danh mục</h5>
-			<span>Quản lý sản phẩm</span>
+			<span>Quản lý danh mục</span>
 		</div>
 		<div class="horControlB menu_action">
 			<ul>
@@ -56,7 +56,6 @@ $hidden = array(
 					<td style="width:10px;"><img src="<?php echo public_url('admin/images/icons/tableArrows.png'); ?>"></td>
 					<td style="width:80px;">ID</td>
 					<td>Tên</td>
-					<td>Tiêu đề</td>
 					<td>Danh mục cha</td>
 					<td>Thứ tự hiển thị</td>
 					<td style="width:100px;"></td>
@@ -76,9 +75,6 @@ $hidden = array(
 					<td class="textC"><?php echo $category['id']; ?></td>
 					<td>
 						<span class="tipS" original-title="<?php echo $category['name']; ?>"><?php echo $category['name']; ?></span>
-					</td>
-					<td>
-						<span class="tipS" original-title="<?php echo $category['site_title']; ?>"><?php echo $category['site_title']; ?></span>
 					</td>
 					<td class="textC"><?php echo $category['parent_id']; ?></td>
 					<td class="textC"><?php echo $category['sort_order']; ?></td>
