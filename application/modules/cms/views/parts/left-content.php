@@ -30,7 +30,7 @@
 			</ul>
 		</li>
 		<li class="product">
-			<a href="" class="exp <?php if(isset($menu_active) && $menu_active == "product") : ?>active<?php endif; ?>">
+			<a href="javascript:void(0)" class="exp <?php if(isset($menu_active) && $menu_active == "product") : ?>active" id="current"<?php else : ?>"<?php endif; ?>>
 				<span>Sản phẩm</span>
 				<strong>3</strong>
 			</a>
@@ -39,7 +39,7 @@
 					<a href="">Sản phẩm</a>
 				</li>
 				<li <?php if(isset($submenu_active) && $submenu_active == "categories") : ?>class="this"<?php endif; ?>>
-					<a href="">Danh mục</a>
+					<a href="<?php echo site_url('cms/categories'); ?>">Danh mục</a>
 				</li>
 				<li <?php if(isset($submenu_active) && $submenu_active == "comment") : ?>class="this"<?php endif; ?>>
 					<a href="">Phản hồi</a>
