@@ -70,6 +70,18 @@ foreach ($parent_categories as $item) {
 			</div>
 			<div class="clear"></div>
 		</div>
+		<div class="formRow">
+			<label class="formLeft" for="sort_order">Thứ tự hiển thị:</label>
+			<div class="formRight">
+				<span class="oneTwo">
+					<?php echo form_input($sort_order); ?>
+				</span>
+				<div name="name_error" class="clear error">
+					<?php echo form_error($sort_order["name"]); ?>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
 		<div class="formSubmit">
    			<input type="submit" value="<?php if ($id) : ?>Cập nhật<?php else : ?>Thêm mới<?php endif; ?>" class="dblueB">
    			<input type="reset" value="Hủy bỏ" class="greyishB">

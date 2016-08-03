@@ -76,7 +76,7 @@ $hidden = array(
 					<td>
 						<span class="tipS" original-title="<?php echo $category['name']; ?>"><?php echo $category['name']; ?></span>
 					</td>
-					<td class="textC"><?php echo $category['parent_id']; ?></td>
+					<td class="textC"><?php if ($category['parent_id']) : echo $category['parent_name']; endif; ?></td>
 					<td class="textC"><?php echo $category['sort_order']; ?></td>
 					<td class="option">
 					 	<a href="<?php echo site_url('cms/categories/form/'.$category['id']); ?>" class="tipS " original-title="Chỉnh sửa">
@@ -98,7 +98,7 @@ $hidden = array(
 				<tr>
 					<td colspan="10">
 				     	<div class="list_action itemActions">
-							<a href="#submit" id="submit" class="button blueB" url="<?php echo site_url('cms/category/del_all'); ?>">
+							<a href="#submit" id="submit" class="button blueB" url="<?php echo site_url('cms/categories/del_all'); ?>">
 								<span style="color:white;">Xóa hết</span>
 							</a>
 					 	</div>

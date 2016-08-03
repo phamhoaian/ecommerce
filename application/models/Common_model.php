@@ -72,4 +72,14 @@ class Common_model extends MY_Model {
 		}
 		return FALSE;		
 	}
+
+	public function get_category_parent($parent_id)
+	{
+		if(is_numeric($parent_id) && $parent_id)
+		{
+			$this->set_table($this->_categories_table);
+			return $this->get_row(array("id" => $parent_id));
+		}
+		return FALSE;		
+	}
 }

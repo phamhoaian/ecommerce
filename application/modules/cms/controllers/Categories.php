@@ -53,6 +53,13 @@ class Categories extends MY_Controller {
 
 		// get list user
 		$this->data['categories'] = $this->common_model->get_all_categories(NULL, 'parent_id ASC, sort_order ASC', $this->limit, $offset);
+		if ($this->data['categories'])
+		{
+			foreach ($this->data['categories'] as &$category) {
+				$parent_categories = $this->common_model->get_category_parent($category["parent_id"]);
+				$category['parent_name'] = $parent_categories["name"];
+			}
+		}
 		$this->data['count'] = $this->common_model->get_count_categories(NULL);
 
 		// generate pagination
@@ -132,7 +139,14 @@ class Categories extends MY_Controller {
 		}
 
 		// list parent categories
-		$this->data["parent_categories"] = $this->common_model->get_all_categories(array('parent_id' => 0));
+		$where = array(
+			'parent_id' => 0
+		);
+		if ($this->data["id"]) 
+		{
+			$where["id !="] = $this->data["id"];
+		}
+		$this->data["parent_categories"] = $this->common_model->get_all_categories($where);
 
 		// form validation
 		$this->load->helper('form');
@@ -147,6 +161,7 @@ class Categories extends MY_Controller {
 			$upd_data = array(
 				'name' => $this->security_clean(set_value('name')),
 				'parent_id' => $this->security_clean(set_value('parent_id')),
+				'sort_order' => intval($this->security_clean(set_value('sort_order')))
 			);
 
 			// insert data into table categories
@@ -183,6 +198,82 @@ class Categories extends MY_Controller {
 			// load view
 			$this->load_view('categories/form', $this->data);
 		}
+	}
+
+	/**
+	 *
+	 * Delete a category by cat_id
+	 * @param  integer cat_id
+	 * @return boolean
+	 *
+	 */
+	public function del()
+	{
+		$cat_id = $this->security_clean($this->uri->segment(4, 0));
+		if(is_numeric($cat_id) && $cat_id)
+		{
+			$category = $this->common_model->get_category_by_id($cat_id);
+			if($category)
+			{
+				// delete category
+				$this->common_model->set_table('categories');
+				$del_flag = $this->common_model->delete(array('id' => $cat_id));
+				if($del_flag)
+				{
+					$message = "Xóa danh mục thành công!";
+					$this->session->set_flashdata("message", $message);
+            		redirect("cms/categories");
+					return TRUE;
+				}
+				else // in case no data
+				{
+					define('RETURN_URL', site_url("cms/categories"));
+					$this->message("Không có dữ liệu!");
+					return FALSE;
+				}
+			}
+			else // in case category doesn't exists
+			{
+				define('RETURN_URL', site_url("cms/categories"));
+				$this->message("Danh mục không tồn tại!");
+				return FALSE;
+			}
+		}
+		else // in case cat_id isn't integer or empty
+		{
+			define('RETURN_URL', site_url("cms/categories"));
+			$this->message("Truy cập bị từ chối!");
+			return FALSE;
+		}
+	}
+
+	/**
+	 *
+	 * Delete multi categories by list cat_id
+	 * @param  array cat_ids
+	 * @return boolean
+	 *
+	 */
+	public function del_all()
+	{
+		// status flag
+		$status = FALSE;
+
+		// get list user_id
+		$cat_ids = $this->security_clean($this->input->post('ids'));
+		
+		if ($cat_ids)
+		{
+			$cat_ids = implode(",", $cat_ids);
+
+			$this->common_model->set_table('categories');
+			$del_flag = $this->common_model->delete(array("id IN({$cat_ids})" => NULL));
+			if($del_flag)
+			{
+				$status = TRUE;
+			}
+		}
+		return $status;
 	}
 
 	/**
