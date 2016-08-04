@@ -12,6 +12,7 @@ class Common_model extends MY_Model {
 		$this->_roles_table = $this->_prefix.$this->config->item('DX_roles_table');
 
 		$this->_categories_table = "categories";
+		$this->_product_table = "product";
 	}
 
 	public function get_all_user($where = NULL, $order_by = '', $limit = 0, $offset = 0)
@@ -79,6 +80,35 @@ class Common_model extends MY_Model {
 		{
 			$this->set_table($this->_categories_table);
 			return $this->get_row(array("id" => $parent_id));
+		}
+		return FALSE;		
+	}
+
+	public function get_all_product($where = NULL, $order_by = '', $limit = 0, $offset = 0)
+	{
+		$this->set_table($this->_product_table);
+		$this->db->select("{$this->_product_table}.*, {$this->_categories_table}.name AS cat_name");
+		$this->db->join($this->_categories_table, "{$this->_product_table}.cat_id = {$this->_categories_table}.id", "left");
+		if (is_int($limit) && $limit > 0) {
+			return $this->get_all($where, $order_by, $limit, $offset);
+		}
+		else {
+			return $this->get_all($where, $order_by);
+		}
+	}
+
+	public function get_count_product($where = NULL)
+	{
+		$this->set_table($this->_product_table);
+		return $this->get_count($where);
+	}
+
+	public function get_product_by_id($id)
+	{
+		if(is_numeric($id) && $id)
+		{
+			$this->set_table($this->_product_table);
+			return $this->get_row(array("id" => $id));
 		}
 		return FALSE;		
 	}

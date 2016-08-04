@@ -20,5 +20,12 @@ if ( ! function_exists('public_url'))
     }
 }
 
+if ( ! function_exists('upload_url'))
+{
+    function upload_url($url = '')
+    {
+        return base_url('upload/'.$url);
+    }
+}
 
 

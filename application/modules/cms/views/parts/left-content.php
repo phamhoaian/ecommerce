@@ -36,7 +36,7 @@
 			</a>
 			<ul class="sub">
 				<li <?php if(isset($submenu_active) && $submenu_active == "product") : ?>class="this"<?php endif; ?>>
-					<a href="">Sản phẩm</a>
+					<a href="<?php echo site_url('cms/product'); ?>">Sản phẩm</a>
 				</li>
 				<li <?php if(isset($submenu_active) && $submenu_active == "categories") : ?>class="this"<?php endif; ?>>
 					<a href="<?php echo site_url('cms/categories'); ?>">Danh mục</a>
