@@ -78,7 +78,7 @@ $attributes = array(
 								            <optgroup label="<?php echo $category["name"]; ?>">
 								            	<?php if ($category["child"]) : ?>
 												<?php foreach ($category["child"] as $child) : ?>
-							                    <option value="<?php echo $child["id"] ?>" <?php if ($child["id"] == $this->input->get('catagories')) : ?>selected<?php endif; ?>><?php echo $child["name"] ?></option>
+							                    <option value="<?php echo $child["id"] ?>" <?php if ($child["id"] == $this->input->get('categories')) : ?>selected<?php endif; ?>><?php echo $child["name"] ?></option>
 							                    <?php endforeach; ?>
 								        		<?php endif; ?>
 								            </optgroup>
@@ -145,10 +145,10 @@ $attributes = array(
 						<a href="" target="_blank" class="tipS" title="Xem chi tiết sản phẩm">
 							<img src="<?php echo public_url('admin/images/icons/color/view.png'); ?>">
 						 </a>
-					 	<a href="<?php echo site_url('cms/categories/form/'.$product['id']); ?>" class="tipS " original-title="Chỉnh sửa">
+					 	<a href="<?php echo site_url('cms/product/form/'.$product['id']); ?>" class="tipS " original-title="Chỉnh sửa">
 							<img src="<?php echo public_url('admin/images/icons/color/edit.png'); ?>">
 						</a>
-						<a href="<?php echo site_url('cms/categories/del/'.$product['id']); ?>" class="tipS verify_action" original-title="Xóa">
+						<a href="<?php echo site_url('cms/product/del/'.$product['id']); ?>" class="tipS verify_action" original-title="Xóa">
 						    <img src="<?php echo public_url('admin/images/icons/color/delete.png'); ?>">
 						</a>
 					</td>

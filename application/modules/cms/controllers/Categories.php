@@ -289,14 +289,14 @@ class Categories extends MY_Controller {
 		if($this->data["id"]) // in case edit
 		{
 			$where = array(
-				'name' => $username,
+				'name' => $name,
 				'id !=' => $this->data["id"]
 			);
 		}
 		else // in case insert
 		{
 			$where = array(
-				'name' => $username
+				'name' => $name
 			);
 		}
 
