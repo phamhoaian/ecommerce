@@ -293,7 +293,7 @@ class Product extends MY_Controller {
 			$image_list_json = array();
 			if($image_list)
 			{
-				$image_list_json = json_decode($image_list);
+				$image_list_json = json_decode($image_list, TRUE);
 			}
             if (!empty($_FILES['image_list']['name'])) {
                 $image_upload = $this->upload_library->upload_multi($this->out_img_dir, "image_list");
@@ -464,7 +464,7 @@ class Product extends MY_Controller {
             unlink($file_name);
         }
 
-        $image_list = json_decode($product["image_list"]);
+        $image_list = json_decode($product["image_list"], TRUE);
         foreach ($image_list as $key => $value) {
 		    if ($image_name == $value) {
 		        unset($image_list[$key]);
