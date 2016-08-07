@@ -84,7 +84,7 @@
 			</a>
 			<ul class="sub">
 				<li <?php if(isset($submenu_active) && $submenu_active == "slide") : ?>class="this"<?php endif; ?>>
-					<a href="">Slide</a>
+					<a href="<?php echo site_url('cms/slide'); ?>">Slide</a>
 				</li>
 				<li <?php if(isset($submenu_active) && $submenu_active == "news") : ?>class="this"<?php endif; ?>>
 					<a href="<?php echo site_url('cms/news'); ?>">Tin tức</a>
