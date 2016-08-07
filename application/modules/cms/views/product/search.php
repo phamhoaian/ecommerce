@@ -35,6 +35,14 @@ $attributes = array(
 		</p>
 	</div>
 	<?php } ?>
+	<?php if($this->session->flashdata("error")) { ?>
+	<div class="nNote nFailure hideit">
+		<p>
+			<strong>Lỗi: </strong>
+			<?php echo $this->session->flashdata("error"); ?>
+		</p>
+	</div>
+	<?php } ?>
 	<div class="widget">
 		<div class="title">
 			<span class="titleIcon">

@@ -63,12 +63,9 @@ class Upload_library
 			if ($this->CI->upload->do_upload())
 			{
 				$data = $this->CI->upload->data();
+				$images_list[] = $data["file_name"];
 			}
-			else
-			{
-				$data = $this->CI->upload->display_errors();
-			}
-			$images_list[] = $data["file_name"];
+			
 		}
 		
 		return $images_list;

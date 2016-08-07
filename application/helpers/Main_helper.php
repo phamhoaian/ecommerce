@@ -28,4 +28,14 @@ if ( ! function_exists('upload_url'))
     }
 }
 
+if ( ! function_exists('pre'))
+{
+    function pre($variable = '')
+    {
+        echo "<pre>";
+        print_r($variable);
+        echo "</pre>";
+        exit;
+    }
+}
 

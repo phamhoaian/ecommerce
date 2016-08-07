@@ -30,6 +30,9 @@ class Product extends MY_Controller {
 
 		// limit per page
 		$this->limit = 10;
+
+		// upload directory
+		$this->out_img_dir = "upload/product/";
 	}
 
 	public function index() {
@@ -223,11 +226,9 @@ class Product extends MY_Controller {
 				'name' => $this->security_clean(set_value('name')),
 				'cat_id' => intval($this->security_clean(set_value('cat_id'))),
 				'maker_id' => intval($this->security_clean(set_value('maker_id'))),
-				'price' => $this->security_clean(set_value('price')),
+				'price' => $this->security_clean(str_replace(',', '', set_value('price'))),
 				'content' => htmlspecialchars($this->security_clean(set_value('content'))),
 				'discount' => $this->security_clean(set_value('discount')),
-				'image_link' => $this->security_clean(set_value('image_link')),
-				'image_list' => $this->security_clean(set_value('image_list')),
 				'site_title' => $this->security_clean(set_value('site_title')),
 				'warranty' => $this->security_clean(set_value('warranty')),
 				'gifts' => $this->security_clean(set_value('gifts')),
@@ -254,7 +255,7 @@ class Product extends MY_Controller {
 			else // in case insert
 			{
 				$upd_data['created'] = date('Y-m-d H:i:s', time());
-				if($this->common_model->insert($upd_data))
+				if($this->data["id"] = $this->common_model->insert($upd_data))
 				{
 					$message = "Thêm mới sản phẩm thành công!";
 				}
@@ -263,6 +264,47 @@ class Product extends MY_Controller {
 					$message = "Thêm mới sản phẩm thất bại!";
 				}
 			}
+
+			// load library upload
+			$this->load->library("Upload_library");
+
+			// upload image link
+			$image_link = $this->input->post("image_link_product");
+            if (!empty($_FILES['image']['name'])) {
+                $image_link = $this->upload_library->upload($this->out_img_dir, "image");
+                if (isset($image_link["file_name"]) && $image_link["file_name"])
+                {
+                	$image_link = $image_link["file_name"];
+                }
+                else
+                {
+                	$this->session->set_flashdata("error", $image_link["error"]);
+                	$image_link = '';
+                }
+            }
+
+            $upd_data = array(
+                "image_link" => $image_link
+            );
+            $this->common_model->update($upd_data, array('id' => $this->data["id"]));
+
+            // upload image list
+			$image_list = $this->input->post("image_list_product");
+			$image_list_json = array();
+			if($image_list)
+			{
+				$image_list_json = json_decode($image_list);
+			}
+            if (!empty($_FILES['image_list']['name'])) {
+                $image_upload = $this->upload_library->upload_multi($this->out_img_dir, "image_list");
+                $image_list = array_merge($image_list_json, $image_upload);
+                $image_list = json_encode($image_list);
+            }
+
+            $upd_data = array(
+                "image_list" => $image_list
+            );
+            $this->common_model->update($upd_data, array('id' => $this->data["id"]));
 
 			$this->session->set_flashdata("message", $message);
             redirect("cms/product/search");
@@ -348,6 +390,96 @@ class Product extends MY_Controller {
 			}
 		}
 		return $status;
+	}
+
+	/**
+	 *
+	 * Delete product image
+	 * @param  integer product_id
+	 * @return void
+	 *
+	 */
+	public function photo_del()
+	{
+		// get product id
+		$product_id = $this->security_clean($this->uri->segment(4, 0));
+		if (!$product_id) {
+            $this->session->set_flashdata("error", "Có lỗi xảy ra!");
+            redirect("cms/product/search");
+        }
+
+        // check exists of product
+        $this->common_model->set_table("product");
+        $product = $this->common_model->get_row(array("id" => $product_id));
+        if (!$product) {
+            $this->session->set_flashdata("error", "Sản phẩm không tồn tại!");
+            redirect("cms/product/search");
+        }
+
+        // delete image
+        $file_dir = FCPATH.$this->out_img_dir;
+        $file_name = $file_dir.$product["image_link"];
+        if (file_exists($file_name)) {
+            unlink($file_name);
+        }
+        $upd_data = array(
+            "image_link" => ''
+        );
+        $this->common_model->update($upd_data, array("id" => $product_id));
+        
+        $this->session->set_flashdata("message", "Xóa hình ảnh sản phẩm thành công!");
+        redirect("cms/product/form/".$product_id);
+	}
+
+	/**
+	 *
+	 * Delete product image list
+	 * @param  string image_name
+	 * @return void
+	 *
+	 */
+	public function photo_list_del()
+	{
+		// get product_id
+		$product_id = $this->security_clean($this->uri->segment(4, 0));
+		// get image_name
+		$image_name = $this->security_clean($this->uri->segment(5, 0));
+		if (!$product_id || !$image_name) {
+            $this->session->set_flashdata("error", "Có lỗi xảy ra!");
+            redirect("cms/product/search");
+        }
+
+        // check exists of product
+        $this->common_model->set_table("product");
+        $product = $this->common_model->get_row(array("id" => $product_id));
+        if (!$product) {
+            $this->session->set_flashdata("error", "Sản phẩm không tồn tại!");
+            redirect("cms/product/search");
+        }
+
+        // delete image
+        $file_dir = FCPATH.$this->out_img_dir;
+        $file_name = $file_dir.$image_name;
+        if (file_exists($file_name)) {
+            unlink($file_name);
+        }
+
+        $image_list = json_decode($product["image_list"]);
+        foreach ($image_list as $key => $value) {
+		    if ($image_name == $value) {
+		        unset($image_list[$key]);
+		    }
+		}
+		$image_list = json_encode($image_list);
+
+		// upload database
+        $upd_data = array(
+            "image_list" => $image_list
+        );
+        $this->common_model->update($upd_data, array("id" => $product_id));
+        
+        $this->session->set_flashdata("message", "Xóa ảnh thành công!");
+        redirect("cms/product/form/".$product_id);
 	}
 
 	/**

@@ -5,6 +5,10 @@ $attributes = array(
 	'name' => 'product',
 	'id' => 'product'
 );
+$hidden = array(
+	'image_link_product' => $product["image_link"],
+	'image_list_product' => $product["image_list"]
+);
 $name = array(
 	'name' => 'name',
 	'id' => 'name',
@@ -80,8 +84,24 @@ $content = array(
 <!-- /titleArea -->
 <div class="line"></div>
 <div class="wrapper">
+	<?php if($this->session->flashdata("message")) { ?>
+	<div class="nNote nInformation hideit">
+		<p>
+			<strong>Thông báo: </strong>
+			<?php echo $this->session->flashdata("message"); ?>
+		</p>
+	</div>
+	<?php } ?>
+	<?php if($this->session->flashdata("error")) { ?>
+	<div class="nNote nFailure hideit">
+		<p>
+			<strong>Lỗi: </strong>
+			<?php echo $this->session->flashdata("error"); ?>
+		</p>
+	</div>
+	<?php } ?>
 	<div class="widget">
-		<?php echo form_open_multipart($this->uri->uri_string(), $attributes); ?>
+		<?php echo form_open_multipart($this->uri->uri_string(), $attributes, $hidden); ?>
 		<div class="title">
 			<img src="<?php echo public_url('admin/images/icons/dark/add.png'); ?>" class="titleIcon">
 			<h6><?php echo $page_title; ?></h6>
@@ -108,7 +128,14 @@ $content = array(
 					<label class="formLeft">Hình ảnh:<span class="req">*</span></label>
 					<div class="formRight">
 						<div class="left">
+							<?php if ($product["image_link"]) : ?>
+							<img src="<?php echo upload_url("product/".$product["image_link"]); ?>" alt="<?php echo $product["name"]; ?>" width="200">
+							<p class="textC">
+								[<a href="<?php echo site_url('cms/product/photo_del/'.$id); ?>">Xóa hình ảnh</a>]
+							</p>
+							<?php else : ?>
 							<input type="file" id="image" name="image">
+							<?php endif; ?>
 						</div>
 						<div name="image_error" class="clear error">
 
@@ -120,7 +147,18 @@ $content = array(
 					<label class="formLeft">Ảnh kèm theo:</label>
 					<div class="formRight">
 						<div class="left">
-							<input type="file" id="image_list" name="image_list[]" multiple="">
+						<input type="file" id="image_list" name="image_list[]" multiple="">
+						<?php if ($product["image_list"]) : ?>
+						<?php $image_list = json_decode($product["image_list"]); ?>
+							<?php foreach ($image_list as $img) : ?>
+							<div style="display: inline-block;margin: 0 10px;">
+								<img src="<?php echo upload_url("product/".$img); ?>" alt="<?php echo $product["name"]; ?>" width="100">
+								<p class="textC">
+									[<a href="<?php echo site_url('cms/product/photo_list_del/'.$product["id"].'/'.$img); ?>">Xóa hình ảnh</a>]
+								</p>
+							</div>
+							<?php endforeach; ?>
+						<?php endif; ?>
 						</div>
 						<div name="image_list_error" class="clear error">
 
