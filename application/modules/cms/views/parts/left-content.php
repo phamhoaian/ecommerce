@@ -78,7 +78,7 @@
 			</ul>		
 		</li>
 		<li class="content">
-			<a href="admin/content.html" class="exp <?php if(isset($menu_active) && $menu_active == "content") : ?>active<?php endif; ?>">
+			<a href="javascript:void(0)" class="exp <?php if(isset($menu_active) && $menu_active == "content") : ?>active" id="current"<?php else : ?>"<?php endif; ?>>
 				<span>Nội dung</span>
 				<strong>4</strong>
 			</a>
@@ -87,7 +87,7 @@
 					<a href="">Slide</a>
 				</li>
 				<li <?php if(isset($submenu_active) && $submenu_active == "news") : ?>class="this"<?php endif; ?>>
-					<a href="">Tin tức</a>
+					<a href="<?php echo site_url('cms/news'); ?>">Tin tức</a>
 				</li>
 				<li <?php if(isset($submenu_active) && $submenu_active == "info") : ?>class="this"<?php endif; ?>>
 					<a href="">Trang thông tin</a>
