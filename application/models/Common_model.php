@@ -13,6 +13,7 @@ class Common_model extends MY_Model {
 
 		$this->_categories_table = "categories";
 		$this->_product_table = "product";
+		$this->_news_table = "news";
 	}
 
 	public function get_all_user($where = NULL, $order_by = '', $limit = 0, $offset = 0)
@@ -108,6 +109,33 @@ class Common_model extends MY_Model {
 		if(is_numeric($id) && $id)
 		{
 			$this->set_table($this->_product_table);
+			return $this->get_row(array("id" => $id));
+		}
+		return FALSE;		
+	}
+
+	public function get_all_news($where = NULL, $order_by = '', $limit = 0, $offset = 0)
+	{
+		$this->set_table($this->_news_table);
+		if (is_int($limit) && $limit > 0) {
+			return $this->get_all($where, $order_by, $limit, $offset);
+		}
+		else {
+			return $this->get_all($where, $order_by);
+		}
+	}
+
+	public function get_count_news($where = NULL)
+	{
+		$this->set_table($this->_news_table);
+		return $this->get_count($where);
+	}
+
+	public function get_news_by_id($id)
+	{
+		if(is_numeric($id) && $id)
+		{
+			$this->set_table($this->_news_table);
 			return $this->get_row(array("id" => $id));
 		}
 		return FALSE;		
