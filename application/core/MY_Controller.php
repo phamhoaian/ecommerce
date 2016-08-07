@@ -338,7 +338,7 @@ class MY_Controller extends CI_Controller {
 	/**
 	 * Pagination settings
 	 */
-	public function generate_pagination($path, $total, $limit=10 , $uri_segment)
+	public function generate_pagination($path, $total, $limit=10 , $uri_segment, $query_string = FALSE)
 	{
 		$this->load->library('pagination');
 		# Specify the destination URL.
@@ -349,6 +349,10 @@ class MY_Controller extends CI_Controller {
 		$config['per_page']       = $limit;
 		# Specify whether the page number information is included in any URI segment.
 		$config['uri_segment']    = $uri_segment;
+		# Specify query string
+		$config['use_page_numbers'] = $query_string;
+    	$config['page_query_string'] = $query_string;
+    	$config['query_string_segment'] = 'page';
 		# Specify generation link in the template.
 		$config['first_link']     = 'Trang đầu';
 		$config['first_tag_open'] = '<li>';

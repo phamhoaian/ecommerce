@@ -15,5 +15,5 @@ RewriteRule ^(.*)$ index.php?$1 [L,QSA]
 
 
 RewriteEngine on
-RewriteCond $1 !^(index\.php|index_cron\.php|pMA|favicon\.ico|blog|url|sitemap_mobile\.xml|sitemap\.xml|y_key_.+\.html$|google.+\.html$|ga\.php|clients|test\.php|mixi|css|kikaku|local|cms_parts|app|parts|rss|inc|js|emoji|images|img|common|public|html|sliderimg|data|captcha|jscripts|uploads|wordpress|phpmyadmin|.+\.css$|.+\.gif$|.+\.jpg$|.+\.png$|.+\.js$)
+RewriteCond $1 !^(index\.php|index_cron\.php|pMA|favicon\.ico|blog|url|sitemap_mobile\.xml|sitemap\.xml|y_key_.+\.html$|google.+\.html$|ga\.php|clients|test\.php|mixi|css|kikaku|local|cms_parts|app|parts|rss|inc|js|emoji|images|img|common|public|upload|html|sliderimg|data|captcha|jscripts|uploads|wordpress|phpmyadmin|.+\.css$|.+\.gif$|.+\.jpg$|.+\.png$|.+\.js$)
 RewriteRule ^(.*)$ index.php/$1 [L]
