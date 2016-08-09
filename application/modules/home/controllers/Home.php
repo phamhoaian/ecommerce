@@ -14,20 +14,28 @@ class Home extends MY_Controller {
         $this->load->model('common_model');
 
         // meta title, description
-        $this->data["title"] = "Home";
+        $this->data["title"] = "Trang chủ";
         $this->data["description"] = SITE_NAME;
-
-        // initialize breadcrumbs
-        $this->position['item'][0]['title'] = "Home";
 	}
 
 	public function index() {
 
-		// breadcrumbs
-		$this->data['position'] = $this->load->view("parts/position", $this->position, TRUE);
-
 		// menu active
 		$this->data['menu_active'] = "home";
+
+		// load css and js
+		$this->set_css("royalslider/royalslider.css");
+		$this->set_css("royalslider/skins/minimal-white/rs-minimal-white.css");
+		$this->set_js("jquery/royalslider/jquery.royalslider.min.js");
+
+		// get list slide
+		$this->data["list_slide"] = $this->common_model->get_all_slide(NULL, 'sort_order ASC');
+
+		// get list latest product
+		$this->data["latest_product"] = $this->common_model->get_all_product(NULL, 'created DESC', 3);
+
+		// get list best seller product
+		$this->data["best_seller_product"] = $this->common_model->get_all_product(NULL, 'buyed DESC', 3);
 
 		// load view
 		$this->load_view('top', $this->data);
