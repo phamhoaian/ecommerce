@@ -28,7 +28,7 @@
 			<li class="<?php if(isset($menu_active) && $menu_active == "home") : ?>active index-li<?php endif; ?>"><a href="<?php echo site_url(); ?>">Trang chủ </a></li>
 			<li class=""><a href="">Giới thiệu</a></li>
 			<li class=""><a href="">Hướng dẫn</a></li>
-			<li class=""><a href="">Sản phẩm</a></li>
+			<li class="<?php if(isset($menu_active) && $menu_active == "product") : ?>active index-li<?php endif; ?>"><a href="<?php echo site_url("product"); ?>">Sản phẩm</a></li>
 			<li class=""><a href="">Tin tức</a></li>
 			<li class=""><a href="">Video</a></li>
 			<li class=""><a href="">Liên hệ</a></li>

@@ -65,6 +65,9 @@ class MY_Controller extends CI_Controller {
 					// load database
         			$this->load->database();
 
+        			// load library
+        			$this->load->library("session");
+
 					// load model
         			$this->load->model('common_model');
 
