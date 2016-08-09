@@ -71,72 +71,26 @@
 			<h2> Danh mục sản phẩm </h2>
 		</div>
 		<div class="content-box">
+		<?php if (isset($list_categories) && $list_categories) : ?>
 			<ul class="catalog-main">
+			<?php foreach ($list_categories as $category) : ?>
 				<li>
-					<span><a href="#" title="Tivi">Tivi</a></span>
-					<!-- lay danh sach danh muc con -->
+					<span>
+						<a href="<?php echo site_url("product/category/".$category["id"]); ?>" title="<?php echo $category["name"]; ?>"><?php echo $category["name"]; ?></a>
+					</span>
+					<?php if (isset($category["sub"]) && $category["sub"]) : ?>
 					<ul class="catalog-sub">
+						<?php foreach ($category["sub"] as $sub) : ?>
 						<li>
-							<a href="" title="Toshiba">Toshiba</a>
+							<a href="<?php echo site_url("product/category/".$sub["id"]); ?>" title="<?php echo $sub["name"]; ?>"><?php echo $sub["name"]; ?></a>
 						</li>
-						<li>
-							<a href="" title="Samsung">Samsung</a>
-						</li>
-						<li>
-							<a href="" title="Panasonic">Panasonic</a>
-						</li>
-						<li>
-							<a href="" title="LG">LG</a>
-						</li>
-						<li>
-							<a href="" title="JVC">JVC</a>
-						</li>
-						<li>
-							<a href="" title="AKAI">AKAI</a>
-						</li>
+						<?php endforeach; ?>
 					</ul>
+					<?php endif; ?>
 				</li>
-				<li>
-					<span><a href="#" title="Điện thoại">Điện thoại</a></span>
-					<!-- lay danh sach danh muc con -->
-					<ul class="catalog-sub">
-						<li>
-							<a href="" title="HTC">HTC</a>
-						</li>
-						<li>
-							<a href="" title="BlackBerry">BlackBerry</a>
-						</li>
-						<li>
-							<a href="" title="Asus">Asus</a>
-						</li>
-						<li>
-							<a href="" title="Apple">Apple</a>
-						</li>
-					</ul>
-				</li>
-				<li>
-					<span><a href="#" title="Laptop">Laptop</a></span>
-					<!-- lay danh sach danh muc con -->
-					<ul class="catalog-sub">
-						<li>
-							<a href="" title="HP">HP</a>
-						</li>
-						<li>
-							<a href="" title="Dell">Dell</a>
-						</li>
-						<li>
-							<a href="" title="Asus">Asus</a>
-						</li>
-						<li>
-							<a href="" title="Apple">Apple</a>
-						</li>
-						<li>
-							<a href="" title="Acer">Acer</a>
-						</li>		
-
-					</ul>
-				</li>
-			</ul>	    
+			<?php endforeach; ?>
+			</ul>	 
+		<?php endif; ?>   
 		</div>
 	</div>
 </div>

@@ -53,6 +53,36 @@ class MY_Controller extends CI_Controller {
 		{
 			$this->output->enable_profiler(TRUE);
 		}
+
+		// seperate between cms and user side
+		$controller = $this->uri->segment(1);
+		switch ($controller) {
+			case 'cms':
+				break;
+			
+			default:
+				{
+					// load database
+        			$this->load->database();
+
+					// load model
+        			$this->load->model('common_model');
+
+        			// get list categories
+        			$this->data['list_categories'] = $this->common_model->get_all_categories(array('parent_id' => 0), 'id DESC');
+					if($this->data['list_categories'])
+					{
+						foreach ($this->data['list_categories'] as &$row) {
+							$row['sub'] = $this->common_model->get_all_categories(array('parent_id' => $row['id']), 'sort_order ASC');
+						}
+					}
+
+					// get latest news
+					$this->data['latest_news'] = $this->common_model->get_all_news(array('created <=' => date('Y:m:d H:i:s', time())), 'created DESC', 5);
+
+					break;
+				}
+		}
 	}
 
 	/**
