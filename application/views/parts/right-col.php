@@ -31,33 +31,19 @@
         <div class="title tittle-box-right">
 	        <h2> Bài viết mới </h2>
 	    </div>
-		    <div class="content-box">
-		       <ul class='news'>
-		            <li>
-		                <a href="" title="Mỹ tăng cường không kích Iraq">
-		                	<img src="<?php echo public_url('site/images/li.png'); ?>">
-			                Mỹ tăng cường không kích Iraq
-		                </a>
-                    </li>
-	                <li>
-		                <a href="" title="Hà Nội: CSGT tìm người thân giúp cháu bé 8 tuổi đi lạc">
-			                <img src="<?php echo public_url('site/images/li.png'); ?>">
-			                Hà Nội: CSGT tìm người thân giúp cháu bé 8 tuổi đi lạc
-		                </a>
-                    </li>
-                	<li>
-		                <a href="l" title="Arsenal đồng ý bán Vermaelen cho Barcelona">
-			                <img src="<?php echo public_url('site/images/li.png'); ?>">
-			                Arsenal đồng ý bán Vermaelen cho Barcelona
-		                </a>
-                    </li>
-	                <li>
-		                <a href="" title="Nhà lầu siêu xe hàng mã ế sưng, đồ chơi biển đảo hút khách">
-			                <img src="<?php echo public_url('site/images/li.png'); ?>">
-			                Nhà lầu siêu xe hàng mã ế sưng, đồ chơi biển đảo hút khách
-		                </a>
-                    </li>
-             	</ul>
+	    <div class="content-box">
+	    <?php if (isset($latest_news) && $latest_news) : ?>
+	       	<ul class='news'>
+	       	<?php foreach ($latest_news as $news) : ?>
+	            <li>
+	                <a href="<?php echo site_url("news/detail/".$news["id"]); ?>" title="<?php echo $news["title"]; ?>">
+	                	<img src="<?php echo public_url('site/images/li.png'); ?>">
+		                <?php echo $news["title"]; ?>
+	                </a>
+                </li>
+            <?php endforeach; ?>
+         	</ul>
+     	<?php endif; ?>
 	    </div>
    	</div>		
    	<!-- /news -->

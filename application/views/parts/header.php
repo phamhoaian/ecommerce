@@ -25,7 +25,7 @@
 	<!-- /top -->
 	<div id="menu">
 		<ul class="menu_top">
-			<li class="active index-li"><a href="<?php echo site_url(); ?>">Trang chủ </a></li>
+			<li class="<?php if(isset($menu_active) && $menu_active == "home") : ?>active index-li<?php endif; ?>"><a href="<?php echo site_url(); ?>">Trang chủ </a></li>
 			<li class=""><a href="">Giới thiệu</a></li>
 			<li class=""><a href="">Hướng dẫn</a></li>
 			<li class=""><a href="">Sản phẩm</a></li>
