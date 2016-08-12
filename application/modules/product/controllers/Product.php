@@ -18,7 +18,7 @@ class Product extends MY_Controller {
         $this->data["description"] = SITE_NAME;
 
         // limit per page
-        $this->limit = 3;
+        $this->limit = 9;
 
         // initialize breadcrumbs
         $this->position['item'][0]['title'] = "Trang chủ";
@@ -135,5 +135,39 @@ class Product extends MY_Controller {
 
 		// load view
 		$this->load_view('top', $this->data);
+	}
+
+	public function detail()
+	{
+		// load css and js
+		$this->set_css("jqzoom_ev/css/jquery.jqzoom.css");
+		$this->set_js("jquery/jqzoom_ev/jquery.jqzoom-core.js");
+		$this->set_js("jquery/tivi/jwplayer.js");
+
+		// get product_id
+		$product_id = $this->security_clean($this->uri->segment(3,0));
+
+		// check valid product_id
+		if (!$product_id || !is_numeric($product_id))
+		{
+			redirect();
+		}
+
+		// check exists of product
+		$this->data["product"] = $this->common_model->get_product_by_id($product_id);
+		if (!$this->data["product"])
+		{
+			redirect();
+		}
+
+		// get category name
+		$category = $this->common_model->get_category_by_id($this->data["product"]["cat_id"]);
+		$this->data["product"]["cat_name"] = $category["name"];
+
+		// relatest product
+		$this->data["relatest_product"] = $this->common_model->get_all_product(array("product.id !=" => $product_id, "cat_id" => $this->data["product"]["cat_id"]), "RAND()", 3);
+
+		// load view
+		$this->load_view('detail', $this->data);
 	}
 }
