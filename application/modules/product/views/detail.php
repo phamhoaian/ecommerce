@@ -51,7 +51,7 @@
 			| Tổng số: <b class="rate_count"><?php echo $product["rate_total"] ?></b>
 		</p>
 		<div class="action">
-			<a class="button" style="float:left;padding:8px 15px;font-size:16px" href="#" title="Mua ngay">Thêm vào giỏ hàng</a>
+			<a class="button" style="float:left;padding:8px 15px;font-size:16px" href="<?php echo site_url("cart/add/".$product["id"]); ?>" title="Mua ngay">Thêm vào giỏ hàng</a>
 			<div class="clear"></div>
 		</div>
 	</div>

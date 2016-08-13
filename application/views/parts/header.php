@@ -7,8 +7,8 @@
 		</div>
 		<!-- /logo -->
 		<div id="cart_expand" class="cart"> 
-			<a href="" class="cart_link">
-				Giỏ hàng <span id="in_cart">0</span> sản phẩm
+			<a href="<?php echo site_url("cart"); ?>" class="cart_link">
+				Giỏ hàng <span id="in_cart"><?php echo $total_items; ?></span> sản phẩm
 			</a> 
 			<img alt="" src="<?php echo public_url('site/images/cart.png'); ?>"> 
 		</div>
