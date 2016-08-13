@@ -67,7 +67,8 @@ class MY_Controller extends CI_Controller {
 
         			// load library
         			$this->load->library("session");
-
+        			$this->load->library('cart');
+        
 					// load model
         			$this->load->model('common_model');
 
@@ -82,6 +83,9 @@ class MY_Controller extends CI_Controller {
 
 					// get latest news
 					$this->data['latest_news'] = $this->common_model->get_all_news(array('created <=' => date('Y:m:d H:i:s', time())), 'created DESC', 5);
+
+					// get total items in cart
+					$this->data['total_items'] = (int) $this->cart->total_items();
 
 					break;
 				}
