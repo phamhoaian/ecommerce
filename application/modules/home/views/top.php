@@ -80,7 +80,7 @@
 			</center>
 			<div class="action">
 				<p style="float:left;margin-left:10px">Lượt xem: <b><?php echo number_format($product["view"]); ?></b></p>
-				<a class="button" href="#" title="Mua ngay">Mua ngay</a>
+				<a class="button" href="<?php echo site_url("cart/add/".$product["id"]); ?>" title="Mua ngay">Mua ngay</a>
 				<div class="clear"></div>
 			</div>
 		</div>
@@ -119,7 +119,7 @@
 			</center>
 			<div class="action">
 				<p style="float:left;margin-left:10px">Lượt xem: <b><?php echo number_format($product["view"]); ?></b></p>
-				<a class="button" href="#" title="Mua ngay">Mua ngay</a>
+				<a class="button" href="<?php echo site_url("cart/add/".$product["id"]); ?>" title="Mua ngay">Mua ngay</a>
 				<div class="clear"></div>
 			</div>
 		</div>
