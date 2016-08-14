@@ -14,9 +14,9 @@
 		</div>
 		<!-- /cart -->
 		<div id="search">
-			<form method="get" action="tim-kiem.html">
-				<input type="text" id="text-search" name="key-search" value="" placeholder="Tìm kiếm sản phẩm..." class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
-				<input type="submit" id="but" name="but" value="">
+			<form method="get" action="<?php echo site_url("product/search"); ?>">
+				<input type="text" id="text-search" name="keyword" value="<?php if (isset($keyword) && $keyword) : echo $keyword; endif; ?>" placeholder="Tìm kiếm sản phẩm..." class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+				<input type="submit" id="but" value="">
 			</form>
 		</div>
 		<!-- /search -->
