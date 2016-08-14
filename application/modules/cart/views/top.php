@@ -54,8 +54,9 @@
 				</tr>
 				<tr>
 					<td colspan="6">
-						<input type="submit" value="Cập nhật">
+						<input type="submit" value="Cập nhật" class="button">
 						<button><a href="<?php echo site_url("cart/del"); ?>">Xóa toàn bộ</a></button>
+						<button><a href="<?php echo site_url("order/checkout"); ?>">Đặt hàng</a></button>
 					</td>
 				</tr>
 			</tbody>
