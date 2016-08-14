@@ -94,7 +94,7 @@
     <script type="text/javascript">
         $(function() {
             $( "#text-search" ).autocomplete({
-                source: "",
+                source: '<?php echo site_url("product/search/auto"); ?>',
             });
         });
     </script>
