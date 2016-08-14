@@ -1,65 +1,58 @@
+<?php
+$price_from = array();
+$price_from_selected = '';
+for ($i = 0; $i <= 10000000; $i = $i + 1000000)
+{
+	if (isset($price_from_value) && $price_from_value == $i) 
+	{
+		$price_from_selected = set_value("price_from", $price_from_value);
+	}
+	$price_from[$i] = number_format($i).' đ';
+}
+$price_to = array();
+$price_to_selected = '';
+for ($i = 1000000; $i <= 20000000; $i = $i + 1000000)
+{
+	if (isset($price_to_value) && $price_to_value == $i) 
+	{
+		$price_to_selected = set_value("price_to", $price_to_value);
+	}
+	$price_to[$i] = number_format($i).' đ';
+}
+?>
 <div class='left'>
 	<div class="box-left">
 		<div class="title tittle-box-left">
 			<h2> Tìm kiếm theo giá </h2>
 		</div>
 		<div class="content-box" >
-			<form class="t-form form_action" method="post" style='padding:10px' action="product/search_price.html" name="search" >
+			<form class="t-form form_action" method="get" style='padding:10px' action="<?php echo site_url("product/search_price"); ?>" name="search" >
 				<div class="form-row">
 					<label for="param_price_from" class="form-label" style='width:70px'>Giá từ:<span class="req">*</span></label>
 					<div class="form-item"  style='width:90px'>
-						<select  class="input" id="price_from" name="price_from" >
-							<option value="0">0 đ</option>
-							<option value="1000000">1,000,000 đ</option>
-							<option value="2000000">2,000,000 đ</option>
-							<option value="3000000">3,000,000 đ</option>
-							<option value="4000000">4,000,000 đ</option>
-							<option value="5000000">5,000,000 đ</option>
-							<option value="6000000">6,000,000 đ</option>
-							<option value="7000000">7,000,000 đ</option>
-							<option value="8000000">8,000,000 đ</option>
-							<option value="9000000">9,000,000 đ</option>
-							<option value="10000000">10,000,000 đ</option>
-						</select>
+						<?php echo form_dropdown('price_from', $price_from, $price_from_selected, 'class="input" id="price_from"'); ?>
 						<div class="clear"></div>
-						<div class="error" id="price_from_error"></div>
+						<div class="error" id="price_from_error">
+							<?php echo form_error('price_from'); ?>
+						</div>
 					</div>
 					<div class="clear"></div>
 				</div>
 				<div class="form-row">
 					<label for="param_price_from" class="form-label" style='width:70px'>Giá tới:<span class="req">*</span></label>
 					<div class="form-item"  style='width:90px'>
-						<select  class="input" id="price_to" name="price_to" >
-							<option value="1000000">1,000,000 đ</option>
-							<option value="2000000">2,000,000 đ</option>
-							<option value="3000000">3,000,000 đ</option>
-							<option value="4000000">4,000,000 đ</option>
-							<option value="5000000">5,000,000 đ</option>
-							<option value="6000000">6,000,000 đ</option>
-							<option value="7000000">7,000,000 đ</option>
-							<option value="8000000">8,000,000 đ</option>
-							<option value="9000000">9,000,000 đ</option>
-							<option value="10000000">10,000,000 đ</option>
-							<option value="11000000">11,000,000 đ</option>
-							<option value="12000000">12,000,000 đ</option>
-							<option value="13000000">13,000,000 đ</option>
-							<option value="14000000">14,000,000 đ</option>
-							<option value="15000000">15,000,000 đ</option>
-							<option value="16000000">16,000,000 đ</option>
-							<option value="17000000">17,000,000 đ</option>
-							<option value="18000000">18,000,000 đ</option>
-							<option value="19000000">19,000,000 đ</option>
-							<option value="20000000">20,000,000 đ</option>
-						</select>
+						<?php echo form_dropdown('price_to', $price_to, $price_to_selected, 'class="input" id="price_to"'); ?>
 						<div class="clear"></div>
-						<div class="error" id="price_from_error"></div>
+						<div class="error" id="price_from_error">
+							<?php echo form_error('price_to'); ?>
+						</div>
 					</div>
 					<div class="clear"></div>
 				</div>
 				<div class="form-row">
 					<label class="form-label">&nbsp;</label>
 					<div class="form-item">
-						<input type="submit" class="button" name='search' value="Tìm kiếm" style='height:30px !important;line-height:30px !important;padding:0px 10px !important'>
+						<input type="submit" class="button" value="Tìm kiếm" style='height:30px !important;line-height:30px !important;padding:0px 10px !important'>
 					</div>
 					<div class="clear"></div>
 				</div>
