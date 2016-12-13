@@ -32,7 +32,7 @@ class Home extends MY_Controller {
 		$this->data["list_slide"] = $this->common_model->get_all_slide(NULL, 'sort_order ASC');
 
 		// get list latest news
-		$this->data["latest_news"] = $this->common_model->get_all_news(NULL, 'created DESC', 3);
+		$this->data['latest_news'] = $this->common_model->get_all_news(NULL, 'created DESC', 3);
 
 		// get list latest product
 		$this->data["latest_product"] = $this->common_model->get_all_product(NULL, 'created DESC', 3);
