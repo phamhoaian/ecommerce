@@ -57,7 +57,5 @@ class Home extends MY_Controller {
 		$this->load_view('side_ci', $this->data);
 	}
 }
-/*
-End of file side_ci.php
-Location: ./modules/home/views/side_ci.php
-*/
+// End of file side_ci.php
+// Location: ./modules/home/views/side_ci.php
