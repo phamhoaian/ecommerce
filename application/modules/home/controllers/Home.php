@@ -43,4 +43,12 @@ class Home extends MY_Controller {
 		// load view
 		$this->load_view('top', $this->data);
 	}
+
+	public function side_ci()
+	{
+		$this->data["exhibition"]["name"] = "test";
+
+		 // load view
+		$this->load_view('side_ci', $this->data);
+	}
 }
