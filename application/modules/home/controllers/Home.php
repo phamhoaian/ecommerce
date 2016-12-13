@@ -16,39 +16,40 @@ class Home extends MY_Controller {
         // meta title, description
         $this->data["title"] = "Trang chủ";
         $this->data["description"] = SITE_NAME;
-	}
+    }
 
-	public function index() {
+    public function index()
+    {
 
-		// menu active
-		$this->data['menu_active'] = "home";
+        // menu active
+        $this->data['menu_active'] = "home";
 
-		// load css and js
-		$this->set_css("royalslider/royalslider.css");
-		$this->set_css("royalslider/skins/minimal-white/rs-minimal-white.css");
-		$this->set_js("jquery/royalslider/jquery.royalslider.min.js");
+        // load css and js
+        $this->set_css("royalslider/royalslider.css");
+        $this->set_css("royalslider/skins/minimal-white/rs-minimal-white.css");
+        $this->set_js("jquery/royalslider/jquery.royalslider.min.js");
 
-		// get list slide
-		$this->data["list_slide"] = $this->common_model->get_all_slide(NULL, 'sort_order ASC');
+        // get list slide
+        $this->data["list_slide"] = $this->common_model->get_all_slide(null, 'sort_order ASC');
 
-		// get list latest news
-		$this->data['latest_news'] = $this->common_model->get_all_news(NULL, 'created DESC', 3);
+        // get list latest news
+        $this->data['latest_news'] = $this->common_model->get_all_news(null, 'created DESC', 3);
 
-		// get list latest product
-		$this->data["latest_product"] = $this->common_model->get_all_product(NULL, 'created DESC', 3);
+        // get list latest product
+        $this->data["latest_product"] = $this->common_model->get_all_product(null, 'created DESC', 3);
 
-		// get list best seller product
-		$this->data["best_seller_product"] = $this->common_model->get_all_product(NULL, 'buyed DESC', 3);
+        // get list best seller product
+        $this->data["best_seller_product"] = $this->common_model->get_all_product(null, 'buyed DESC', 3);
 
-		// load view
-		$this->load_view('top', $this->data);
-	}
+        // load view
+        $this->load_view('top', $this->data);
+    }
 
-	public function side_ci()
-	{
-		$this->data["exhibition"]["name"] = "test";
+    public function side_ci()
+    {
+        $this->data["exhibition"]["name"] = "test";
 
-		 // load view
-		$this->load_view('side_ci', $this->data);
-	}
+         // load view
+        $this->load_view('side_ci', $this->data);
+    }
 }
