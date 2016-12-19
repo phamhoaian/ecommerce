@@ -7,4 +7,16 @@
   <rule ref="CodeIgniter.WhiteSpace.DisallowWitheSpaceAroundPhpTags">
 	 <exclude-pattern>*/views/*</exclude-pattern>
   </rule>
+
+  <rule ref="CodeIgniter.Files.Utf8Encoding">
+	 <exclude-pattern>*/views/*</exclude-pattern>
+  </rule>
+
+  <rule ref="CodeIgniter.Files.ClosingFileComment">
+	 <exclude-pattern>*/views/*</exclude-pattern>
+  </rule>
+
+  <rule ref="CodeIgniter.Files.ClosingLocationComment">
+	 <exclude-pattern>*/views/*</exclude-pattern>
+  </rule>
 </ruleset>
