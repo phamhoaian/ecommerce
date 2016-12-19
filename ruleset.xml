@@ -24,9 +24,12 @@
 	 <exclude-pattern>*/modules/*</exclude-pattern>
   </rule>
 
-  <rule ref="PEAR">
-  	 <exclude name="PEAR.Commenting.FileComment" />
-  	 <exclude name="PEAR.Commenting.ClassComment" />
+  <rule ref="PEAR.Commenting.FileComment">
+  	 <exclude-pattern>*/modules/*</exclude-pattern>
+  </rule>
+
+  <rule ref="PEAR.Commenting.ClassComment">
+	 <exclude-pattern>*/modules/*</exclude-pattern>
   </rule>
 
   <rule ref="PEAR.Commenting.FunctionComment">
