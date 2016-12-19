@@ -5,4 +5,8 @@
   <rule ref="Squiz">
 	<exclude name="Squiz.Commenting.FileComment"/>
   </rule>
+
+  <rule ref="CodeIgniter">
+	<exclude-pattern>*/views/*</exclude-pattern>
+  </rule>
 </ruleset>
