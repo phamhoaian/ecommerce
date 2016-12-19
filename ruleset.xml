@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ruleset name="CodeIgniter">
+  <description>CodeIgniter coding standard as described at http://codeigniter.com/user_guide/general/styleguide.html.</description>
+  <rule ref="CodeIgniter"/>
+</ruleset>
