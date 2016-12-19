@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ruleset name="CodeIgniter">
+  <description>CodeIgniter coding standard as described at http://codeigniter.com/user_guide/general/styleguide.html.</description>
+
+  <rule ref="CodeIgniter"/>
+
+  <rule ref="CodeIgniter.WhiteSpace.DisallowWitheSpaceAroundPhpTags">
+	 <exclude-pattern>*/views/*</exclude-pattern>
+  </rule>
+
+  <rule ref="CodeIgniter.Files.Utf8Encoding">
+	 <exclude-pattern>application/*</exclude-pattern>
+  </rule>
+
+  <rule ref="CodeIgniter.Files.ClosingFileComment">
+	 <exclude-pattern>application/*</exclude-pattern>
+  </rule>
+
+  <rule ref="CodeIgniter.Files.ClosingLocationComment">
+	 <exclude-pattern>application/*</exclude-pattern>
+  </rule>
+
+  <rule ref="CodeIgniter.Commenting.InlineComment">
+	 <exclude-pattern>application/*</exclude-pattern>
+  </rule>
+
+  <rule ref="PEAR.Commenting.FileComment">
+  	 <exclude-pattern>application/*</exclude-pattern>
+  </rule>
+
+  <rule ref="PEAR.Commenting.ClassComment">
+	 <exclude-pattern>application/*</exclude-pattern>
+  </rule>
+
+  <rule ref="PEAR.Commenting.FunctionComment">
+  	 <exclude-pattern>*/views/*</exclude-pattern>
+  </rule>
+
+  <rule ref="Squiz.Commenting.VariableComment">
+  	 <exclude-pattern>*/views/*</exclude-pattern>
+  </rule>
+</ruleset>
