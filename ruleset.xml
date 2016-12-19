@@ -2,7 +2,9 @@
 <ruleset name="CodeIgniter">
   <description>CodeIgniter coding standard as described at http://codeigniter.com/user_guide/general/styleguide.html.</description>
 
-  <rule ref="CodeIgniter">
-	<exclude-pattern>*/views/*</exclude-pattern>
+  <rule ref="CodeIgniter"/>
+
+  <rule ref="CodeIgniter.WhiteSpace.DisallowWitheSpaceAroundPhpTags">
+	 <exclude-pattern>*/views/*</exclude-pattern>
   </rule>
 </ruleset>
