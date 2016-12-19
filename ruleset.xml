@@ -9,14 +9,31 @@
   </rule>
 
   <rule ref="CodeIgniter.Files.Utf8Encoding">
-	 <exclude-pattern>*/views/*</exclude-pattern>
+	 <exclude-pattern>*/modules/*</exclude-pattern>
   </rule>
 
   <rule ref="CodeIgniter.Files.ClosingFileComment">
-	 <exclude-pattern>*/views/*</exclude-pattern>
+	 <exclude-pattern>*/modules/*</exclude-pattern>
   </rule>
 
   <rule ref="CodeIgniter.Files.ClosingLocationComment">
-	 <exclude-pattern>*/views/*</exclude-pattern>
+	 <exclude-pattern>*/modules/*</exclude-pattern>
+  </rule>
+
+  <rule ref="CodeIgniter.Commenting.InlineComment">
+	 <exclude-pattern>*/modules/*</exclude-pattern>
+  </rule>
+
+  <rule ref="PEAR">
+  	 <exclude name="PEAR.Commenting.FileComment" />
+  	 <exclude name="PEAR.Commenting.ClassComment" />
+  </rule>
+
+  <rule ref="PEAR.Commenting.FunctionComment">
+  	 <exclude-pattern>*/views/*</exclude-pattern>
+  </rule>
+
+  <rule ref="Squiz.Commenting.VariableComment">
+  	 <exclude-pattern>*/views/*</exclude-pattern>
   </rule>
 </ruleset>
