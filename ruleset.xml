@@ -2,10 +2,6 @@
 <ruleset name="CodeIgniter">
   <description>CodeIgniter coding standard as described at http://codeigniter.com/user_guide/general/styleguide.html.</description>
 
-  <rule ref="Squiz">
-	<exclude name="Squiz.Commenting.FileComment"/>
-  </rule>
-
   <rule ref="CodeIgniter">
 	<include-pattern>*/views/*</include-pattern>
   </rule>
