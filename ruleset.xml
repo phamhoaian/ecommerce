@@ -7,6 +7,6 @@
   </rule>
 
   <rule ref="CodeIgniter">
-	<exclude-pattern>*/views/*</exclude-pattern>
+	<include-pattern>*/views/*</include-pattern>
   </rule>
 </ruleset>
