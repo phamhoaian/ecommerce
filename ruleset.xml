@@ -9,19 +9,19 @@
   </rule>
 
   <rule ref="CodeIgniter.Files.Utf8Encoding">
-	 <exclude-pattern>*/modules/*</exclude-pattern>
+	 <exclude-pattern>application/*</exclude-pattern>
   </rule>
 
   <rule ref="CodeIgniter.Files.ClosingFileComment">
-	 <exclude-pattern>*/modules/*</exclude-pattern>
+	 <exclude-pattern>application/*</exclude-pattern>
   </rule>
 
   <rule ref="CodeIgniter.Files.ClosingLocationComment">
-	 <exclude-pattern>*/modules/*</exclude-pattern>
+	 <exclude-pattern>application/*</exclude-pattern>
   </rule>
 
   <rule ref="CodeIgniter.Commenting.InlineComment">
-	 <exclude-pattern>*/modules/*</exclude-pattern>
+	 <exclude-pattern>application/*</exclude-pattern>
   </rule>
 
   <rule ref="PEAR.Commenting.FileComment">
@@ -29,7 +29,7 @@
   </rule>
 
   <rule ref="PEAR.Commenting.ClassComment">
-	 <exclude-pattern>*/modules/*</exclude-pattern>
+	 <exclude-pattern>application/*</exclude-pattern>
   </rule>
 
   <rule ref="PEAR.Commenting.FunctionComment">
